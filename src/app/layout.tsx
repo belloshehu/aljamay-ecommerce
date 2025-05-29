@@ -37,10 +37,8 @@ export default async function RootLayout({
 			>
 				<AuthContextProvider>
 					<Header session={session as Session} />
-					<main>
-						{children}
-						<Toaster />
-					</main>
+					<main>{children}</main>
+					<Toaster />
 				</AuthContextProvider>
 				<Footer />
 			</body>

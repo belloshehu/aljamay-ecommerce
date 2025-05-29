@@ -72,7 +72,30 @@ export const userNavItems: NavigationItemType[] = [
 	},
 ];
 
-export const dashboardNavigation: NavigationItemType[] = [
+export const userDashboardNavigation: NavigationItemType[] = [
+	{
+		label: "Summary",
+		path: "/dashboard",
+	},
+	{
+		label: "orders",
+		path: "/dashboard/orders",
+	},
+	{
+		label: "carts",
+		path: "/dashboard/carts",
+	},
+	{
+		label: "settings",
+		path: "/dashboard/settings",
+	},
+	{
+		label: "profile",
+		path: "/dashboard/profile",
+	},
+];
+
+export const adminDashboardNavigation: NavigationItemType[] = [
 	{
 		label: "Summary",
 		path: "/dashboard",

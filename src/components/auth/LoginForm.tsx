@@ -7,10 +7,11 @@ import { Form } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginValidationSchema from "@/schemas/login.validation.schemas";
 import { cn } from "@/lib/utils";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { signInAction } from "@/app/actions/auth.action";
 import { useSearchParams } from "next/navigation";
-import FormMessage from "../FormMessage";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function LoginForm() {
 	const searchParams = useSearchParams();
@@ -19,6 +20,11 @@ export default function LoginForm() {
 		signInAction,
 		undefined
 	);
+
+	useEffect(() => {
+		error && toast.error(error || "Failed to login");
+	}, [error]);
+
 	const form = useForm({
 		defaultValues: {
 			email: "",
@@ -36,7 +42,7 @@ export default function LoginForm() {
 	return (
 		<Form {...form}>
 			<form
-				className={`w-full md:w-3/4 mx-auto shadow-xl md:p-10 p-5 relative space-y-5`}
+				className={`w-full md:w-3/4 mx-auto md:shadow-xl md:p-10 p-5 relative space-y-5`}
 				action={formAction}
 			>
 				<FormInputField
@@ -69,8 +75,14 @@ export default function LoginForm() {
 				</Button>
 				<input type="hidden" name="redirectTo" value={callbackUrl} />
 			</form>
-			{isLoading} {isPending}
-			{error && <FormMessage message={{ text: error, type: "failure" }} />}
+			<div className="flex justify-evenly items-center mt-5">
+				<p>Have no account?</p>
+				<Link href={"/auth/signup"}>
+					<Button className=" bg-cyan-600 rounded-md text-white">
+						Sign Up
+					</Button>
+				</Link>
+			</div>
 		</Form>
 	);
 }

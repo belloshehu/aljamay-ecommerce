@@ -20,7 +20,7 @@ export default async function DashboardPage() {
 		const products = await prisma.product.count();
 		return (
 			<PageWrapper>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
 					<DashboardMetric title="Total orders" metric={10} />
 					<DashboardMetric title="Total users" metric={100} />
 					<DashboardMetric title="Total revenue" metric={5000} />
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
 	const cartItemsCount = await prisma.cartItem.count();
 	return (
 		<PageWrapper>
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
 				<DashboardMetric title="Total orders" metric={10} />
 				<DashboardMetric title="Total carts Items" metric={cartItemsCount} />
 				<DashboardMetric title="Cancel Orders" metric={5000} />
