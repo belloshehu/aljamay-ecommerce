@@ -6,7 +6,7 @@ export const Footer = () => {
 	return (
 		<footer className="min-h-[20vh] w-full p-5 md:p-20 bg-black text-white">
 			<div className="footer flex flex-col md:flex-row gap-10 md:gap-20 justify-start items-start w-full">
-				<Brand />
+				<Brand className="p-0 md:p-5 text-cyan-500" />
 				<div className="flex flex-col md:flex-row gap-5 md:gap-10">
 					<ul className="list-none p-0">
 						<legend className="font-semibold pb-5">Company</legend>

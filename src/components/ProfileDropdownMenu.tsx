@@ -20,19 +20,17 @@ export default function ProfileDropdownMenu({ session }: { session: Session }) {
 	const { email, firstName, lastName, role } = session.user as UserType;
 
 	const renderNavItems = useCreateNavbar(
-		"user",
+		role,
 		(navItems: NavigationItemType[]) => {
-			return navItems
-				.filter((item) => item.active)
-				.map((item, index) => {
-					return (
-						<DropdownMenuItem key={index}>
-							<Link className="text-left" href={item.path}>
-								{item.label}
-							</Link>
-						</DropdownMenuItem>
-					);
-				});
+			return navItems.map((item, index) => {
+				return (
+					<DropdownMenuItem key={index}>
+						<Link className="text-left" href={item.path}>
+							{item.label}
+						</Link>
+					</DropdownMenuItem>
+				);
+			});
 		}
 	);
 	return (

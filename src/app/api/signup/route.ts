@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
-	const { prisma } = await import("@/lib/prisma");
-
 	if (!process.env.DATABASE_URL) {
 		return NextResponse.json(
 			{ message: "Database connection not configured" },
@@ -13,7 +12,16 @@ export async function POST(request: NextRequest) {
 	}
 	try {
 		const body = await request.json();
-		const { firstName, lastName, email, password } = body;
+		console.log("Signup request body:", body);
+		const {
+			firstName,
+			lastName,
+			email,
+			password,
+			confirmPassword,
+			marketingAccepted,
+			privacyAccepted,
+		} = body;
 
 		if (!email) {
 			return NextResponse.json(
@@ -43,13 +51,34 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const exists = await prisma.user.findUnique({ where: { email } });
+		if (password !== confirmPassword) {
+			return NextResponse.json(
+				{ message: "Passwords do not match" },
+				{ status: StatusCodes.BAD_REQUEST }
+			);
+		}
+
+		if (!privacyAccepted) {
+			return NextResponse.json(
+				{ message: "You must accept the privacy policy" },
+				{ status: StatusCodes.BAD_REQUEST }
+			);
+		}
+
+		if (!marketingAccepted) {
+			return NextResponse.json(
+				{ message: "Marketing acceptance is required" },
+				{ status: StatusCodes.BAD_REQUEST }
+			);
+		}
+		const exists = await prisma.user.findUnique({ where: { email: email } });
 
 		if (exists) {
-			return NextResponse.json(
-				{ message: "Email already exists" },
-				{ status: 400 }
-			);
+			throw new Error("Email already exists");
+			// return NextResponse.json(
+			// 	{ message: "Email already exists" },
+			// 	{ status: 400 }
+			// );
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10);
@@ -60,6 +89,8 @@ export async function POST(request: NextRequest) {
 				lastName,
 				email,
 				password: hashedPassword,
+				markettingAccepted: marketingAccepted,
+				privacyAccepted: privacyAccepted,
 			},
 		});
 
@@ -71,10 +102,11 @@ export async function POST(request: NextRequest) {
 			{ status: 200 }
 		);
 	} catch (error: any) {
+		// throw new Error("Signup failed: " + error.message);
 		return NextResponse.json(
 			{
-				message: "Internal server error",
-				error: error.message,
+				message: error.message || "An unexpected error occurred",
+				error: error.message || "An unexpected error occurred",
 			},
 			{
 				status: StatusCodes.INTERNAL_SERVER_ERROR,

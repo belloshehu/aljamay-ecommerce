@@ -58,7 +58,7 @@ export default function Header({ session }: { session: Session }) {
 			{isMobile && (
 				// if the user is on mobile, show the main drawer
 				// user can open the user drawer from the main drawer
-				<NavigationDrawer />
+				<NavigationDrawer session={session as Session} />
 			)}
 		</header>
 	);

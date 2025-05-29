@@ -8,3 +8,9 @@ export function cn(...inputs: ClassValue[]) {
 export function isActivePath(path: string, currentPath: string) {
 	return path.toLowerCase() === currentPath.toLowerCase();
 }
+
+export function getBaseUrl() {
+	return process.env.NODE_ENV !== "production"
+		? process.env.NEXT_PUBLIC_BASE_URL_DEV
+		: process.env.NEXT_PUBLIC_BASE_URL_PROD;
+}

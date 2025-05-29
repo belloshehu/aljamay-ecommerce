@@ -48,6 +48,10 @@ model User {
   cartItems CartItem[]
   role         Role    @default(USER) // user, admin, etc.
   verified     Boolean   @default(false)
+  privacyAccepted Boolean   @default(false)
+  markettingAccepted Boolean   @default(false)
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
 }
 enum Role {
   USER
