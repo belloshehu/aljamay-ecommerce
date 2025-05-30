@@ -1,3 +1,5 @@
+import { SelectDataType } from "@/types/data.types";
+
 export const carousel = [
 	{
 		message: "Your freshly baked bread makes my family happy day and night.",
@@ -47,5 +49,64 @@ export const products = [
 		image: "/images/bread3.jpg",
 		discount: 15,
 		stock: 106,
+	},
+];
+
+export const productCategories: SelectDataType[] = [
+	{
+		label: "All Products",
+		value: "all",
+	},
+	{
+		label: "Cakes",
+		value: "cakes",
+	},
+	{
+		label: "Breads",
+		value: "breads",
+	},
+	{
+		label: "Pastries",
+		value: "pastries",
+	},
+	{
+		label: "Spicies",
+		value: "spicies",
+	},
+	// , {
+	// 	label: "Cookies",
+	// 	value: "cookies",
+	// }, {
+	// 	label: "Pies",
+	// 	value: "pies",
+	// }, {
+	// 	label: "Cupcakes",
+	// 	value: "cupcakes",
+	// }, {
+	// 	label: "Donuts",
+	// 	value: "donuts",
+	// 	}
+];
+
+export const productSortOptions: SelectDataType[] = [
+	{
+		label: "None",
+		value: "none",
+	},
+	{
+		label: "Price: Low to High",
+		value: "price-low-high",
+	},
+	{
+		label: "Price: High to Low",
+		value: "price-high-low",
+	},
+	{
+		label: "Newest",
+		value: "newest",
+	},
+	{
+		label: "Oldest",
+		value: "oldest",
 	},
 ];
