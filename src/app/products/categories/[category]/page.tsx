@@ -22,7 +22,6 @@ export default async function ProductPage(props: { params: Params }) {
 
 	return (
 		<PageWrapper>
-			<h1>Products</h1>
 			<section className="w-full p-5 md:p-20">
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 					{products.map((product) => (
