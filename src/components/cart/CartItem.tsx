@@ -5,11 +5,20 @@ import { getDiscountPercent } from "@/lib/product.utils";
 import React from "react";
 import { CartItemType as CartItemProps } from "@/types/cart.types";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import { ProductQuantityField } from "../products/ProductQuantityField";
+import { useRemoveFromCart } from "@/hooks/service-hooks/cart.service.hooks";
 
 const CartItem = ({
 	id,
 	product: { name, price, discount, quantity: stock, image },
+	quantity,
 }: CartItemProps) => {
+	const { mutate, isPending } = useRemoveFromCart();
+
+	const handleRemoveFromCart = () => {
+		mutate({ productId: id });
+	};
 	return (
 		<div className="w-full border-[1px] border-cyan-200 flex gap-y-5 flex-col items-center justify-center md:flex-row md:justify-start md:gap-x-8">
 			<Image
@@ -32,16 +41,20 @@ const CartItem = ({
 				</div>
 				<p>{stock} left</p>
 
-				<div className="flex flex-col gap-5 md:flex-row w-full">
-					<Link
-						href="order"
-						className="p-4 bg-gradient-to-r from-green-800 text-center mt-5 to-cyan-500 shadow-lg text-white font-semibold px-7 w-full"
-					>
-						Checkout
+				<ProductQuantityField defaultQuantity={quantity} cartItemId={id} />
+				<div className="flex  gap-3 w-full">
+					<Link href="/products/checkout">
+						<Button className="bg-gradient-to-r from-green-800 text-center to-cyan-500 shadow-lg text-white font-semibold ">
+							Checkout
+						</Button>
 					</Link>
-					<button className="p-4 bg-gradient-to-r border-2 border-cyan-500 text-center mt-5 shadow-lg text-cyan-500 font-semibold px-7 w-full">
+					<Button
+						disabled={isPending}
+						onClick={handleRemoveFromCart}
+						className="bg-gradient-to-r border-2 border-cyan-500 text-center shadow-lg text-cyan-500 font-semibold"
+					>
 						Remove
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

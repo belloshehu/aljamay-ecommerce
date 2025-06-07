@@ -4,9 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export const useGetProductById = (productId: string) => {
 	return useQuery({
 		queryKey: ["product", productId],
-		queryFn: async () => {
-			ProductServiceAPI.getSingleProduct({ productId });
-		},
+		queryFn: async () => ProductServiceAPI.getSingleProduct({ productId }),
 	});
 };
 
