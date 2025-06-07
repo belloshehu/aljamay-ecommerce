@@ -1,6 +1,7 @@
 import React from "react";
 import {
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -30,6 +31,8 @@ export default function FormTextarea({
 	control,
 	label,
 	name,
+	errorMessage,
+	description,
 	...props
 }: FormTextareaProps) {
 	return (
@@ -42,7 +45,8 @@ export default function FormTextarea({
 					<FormControl>
 						<Textarea placeholder={placeholder} {...field} {...props} />
 					</FormControl>
-					<FormMessage />
+					{description && <FormDescription>{description}</FormDescription>}
+					{errorMessage && <FormMessage>{errorMessage}</FormMessage>}
 				</FormItem>
 			)}
 		/>

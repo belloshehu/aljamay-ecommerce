@@ -52,6 +52,8 @@ model User {
   markettingAccepted Boolean   @default(false)
   createdAt     DateTime? @default(now())
   updatedAt     DateTime? @updatedAt
+  products     Product[]
+
 }
 enum Role {
   USER
@@ -62,15 +64,18 @@ model Product {
   id            String    @id   @default(auto())  @map("_id")  @db.ObjectId
   name          String
   price         Int
-  stock         Int
+  quantity      Int
   description   String 
   discount      Int
   image         String 
-  thumbNails    String[]
+  thumbnails    String[]
   cartItems     CartItem[]
-  category     String
+  category      String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  isAvailable   Boolean  @default(true)
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String   @db.ObjectId
 }
 
 model CartItem {

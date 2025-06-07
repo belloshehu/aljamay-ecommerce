@@ -6,14 +6,14 @@ import type { NextConfig } from "next";
 // 		return config;
 // 	},
 // };
-
 const nextConfig: NextConfig = {
+	/* config options here */
+	ignoreDuringBuilds: true,
 	eslint: {
 		// Warning: This allows production builds to successfully complete even if
 		// your project has ESLint errors.
 		ignoreDuringBuilds: true,
 	},
-	reactStrictMode: false,
 	images: {
 		remotePatterns: [
 			{
@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
 				protocol: "https",
 				hostname: "res.cloudinary.com",
 				port: "",
-				pathname: "/dzzxgsrbl/**",
+				pathname: "/dr2hjb07z/**",
 				search: "",
 			},
 		],

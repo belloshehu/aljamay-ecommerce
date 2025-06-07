@@ -1,8 +1,7 @@
+import { ProductType } from "./product.types";
+
 export interface CartItemType {
+	product: ProductType;
+	quantity: number;
 	id: string;
-	name: string;
-	price: number;
-	stock: number;
-	discount: number;
-	image: string;
 }

@@ -1,5 +1,4 @@
 "use client";
-import { ShoppingCart } from "lucide-react";
 import Navbar from "./Navbar";
 import { Righteous } from "next/font/google";
 import Link from "next/link";
@@ -37,10 +36,6 @@ export default function Header({ session }: { session: Session }) {
 			<div className="block lg:hidden">
 				<CartNavItem />
 			</div>
-			<ShoppingCart
-				size={50}
-				className="text-3xl text-green-500 place-self-end block lg:hidden"
-			/>
 			{!isMobile &&
 				(session?.user ? (
 					<ProfileDropdownMenu session={session} />

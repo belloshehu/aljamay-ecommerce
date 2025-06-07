@@ -19,6 +19,9 @@ interface FormImagesUploaderProps {
 	maxNumber?: number;
 	maxImageSize: number;
 	multiple?: boolean;
+	previewWidth?: number;
+	previewHeight?: number;
+	errorMessage?: string;
 }
 
 export default function FormImagesUploader({
@@ -45,7 +48,7 @@ export default function FormImagesUploader({
 							{...props}
 						/>
 					</FormControl>
-					<FormMessage />
+					{props.errorMessage && <FormMessage />}
 				</FormItem>
 			)}
 		/>

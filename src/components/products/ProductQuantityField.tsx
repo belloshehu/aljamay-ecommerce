@@ -1,7 +1,20 @@
 "use client";
 import React from "react";
+import {
+	Select,
+	SelectItem,
+	SelectContent,
+	SelectGroup,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "../ui/select";
 
-export const ProductQuantityField = () => {
+export const ProductQuantityField = ({
+	defaultQuantity = 1,
+}: {
+	defaultQuantity?: number;
+}) => {
 	// const { selectedProduct } = useSelector((store) => store.product);
 	// const dispatch = useDispatch();
 
@@ -14,32 +27,24 @@ export const ProductQuantityField = () => {
 	// };
 
 	return (
-		<div>
-			<p>Quantity</p>
-			<div className="flex justify-start items-center gap-2 my-2">
-				<button
-					className="p-2 rounded-md bg-cyan-300 text-white font-normal"
-					// onClick={handleDecrease}
-				>
-					{/* <HiOutlineMinusSmall /> */}
-				</button>
-				<p className="p-2 px-4 rounded-md border-[1px] border-cyan-400">
-					{/* {selectedProduct?.quantity} */}
-				</p>
-				<button
-					className="p-2 rounded-md bg-cyan-300 text-white font-light"
-					// onClick={handleIncrease}
-				>
-					{/* <GoPlus /> */}
-				</button>
-			</div>
-			{/* <input
-        defaultValue={1}
-        min={1}
-        type="number"
-        className="rounded-md w-full md:w-1/2 p-3 outline-none border-[1px] border-cyan-500"
-        onChange={changeHandler}
-      /> */}
+		<div className="max-w-fit text-black">
+			<Select defaultValue={`${defaultQuantity}`}>
+				<SelectTrigger className="w-[180px]">
+					<SelectValue placeholder="Select quantity" />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						<SelectLabel>Choose quantity</SelectLabel>
+						{Array.from({ length: 100 }, (val, index) => index).map(
+							(item, index) => (
+								<SelectItem value={`${index + 1}`} key={index}>
+									Quantity {index + 1}
+								</SelectItem>
+							)
+						)}
+					</SelectGroup>
+				</SelectContent>
+			</Select>
 		</div>
 	);
 };

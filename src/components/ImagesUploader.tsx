@@ -16,6 +16,8 @@ interface ImagesUploaderProps {
 	withUpdate?: boolean;
 	withRemove?: boolean;
 	multiple?: boolean;
+	previewWidth?: number;
+	previewHeight?: number;
 }
 
 export function ImagesUploader({
@@ -27,6 +29,8 @@ export function ImagesUploader({
 	withUpdate,
 	maxImageSize,
 	multiple,
+	previewWidth = 60,
+	previewHeight = 60,
 }: ImagesUploaderProps) {
 	const onChange = (imageList: ImageListType) => {
 		// data for submit
@@ -83,9 +87,12 @@ export function ImagesUploader({
 									<Image
 										src={image["data_url"]}
 										alt=""
-										width="60"
-										height="60"
-										className="rounded-md h-fit w-[60px]"
+										width={previewWidth}
+										height={previewHeight}
+										className={cn(
+											`rounded-md h-fit w-[${previewHeight}px]`,
+											{}
+										)}
 									/>
 									{(withRemove || withUpdate) && (
 										<div className="image-item__btn-wrapper absolute top-0 right-0 bg-blue-400/40 bg-opacity-10 w-full flex justify-around items-center">
