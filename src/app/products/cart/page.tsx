@@ -21,8 +21,10 @@ export default async function ShoppingCartPage(props: { params: Params }) {
 
 	return (
 		<section className="w-full p-5 md:p-20">
-			<header>
-				<h2>Cart Items({cartItems.length})</h2>
+			<header className="w-full flex items-center justify-between mb-5">
+				<h2 className="text-xl font-semibold">
+					Cart Items({cartItems.length})
+				</h2>
 			</header>
 			<div className="w-full flex flex-col gap-8">
 				{cartItems.map((item) => (

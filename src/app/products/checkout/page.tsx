@@ -1,12 +1,20 @@
 "use client";
 import CartItem from "@/components/cart/CartItem";
 import Loader from "@/components/Loader";
+import AddressDrawer from "@/components/shipping/AddressDrawer";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGetCartItems } from "@/hooks/service-hooks/cart.service.hooks";
 
+import { useState } from "react";
+
 export default function CheckoutPage() {
 	const { data, isLoading } = useGetCartItems();
+	const [toggleAdressForm, setToggleAddressForm] = useState(false);
+
+	const handleToggleAddressForm = () => {
+		setToggleAddressForm((prev) => !prev);
+	};
 	if (isLoading) {
 		return (
 			<div className="w-full h-[80vh] flex items-center justify-center">
@@ -28,7 +36,14 @@ export default function CheckoutPage() {
 				<h1 className="text-xl font-semibold ">Checkout</h1>
 			</div>
 			<div className="w-full flex flex-col gap-5  border-[1px] rounded-md p-5 bg-white">
-				<h3>Shipping address</h3>
+				<div className="w-full flex justify-between items-center">
+					<h3>Shipping address</h3>
+					{/* <Button onClick={handleToggleAddressForm}>
+						{toggleAdressForm ? <SidebarClose /> : <Menu />} Add shipping
+						Address
+					</Button> */}
+					<AddressDrawer />
+				</div>
 			</div>
 
 			<section className="w-full gap-5 flex flex-col my-10">

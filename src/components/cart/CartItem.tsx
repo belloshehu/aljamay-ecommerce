@@ -1,6 +1,9 @@
 "use client";
 import Link from "next/link";
-import { getDiscountPercent } from "@/lib/product.utils";
+import {
+	getDiscountPercent,
+	getPriceWithoutDiscount,
+} from "@/lib/product.utils";
 
 import React from "react";
 import { CartItemType as CartItemProps } from "@/types/cart.types";
@@ -34,7 +37,9 @@ const CartItem = ({
 				</Link>
 				<div className="flex items-center justify-start gap-5 p-0">
 					<p className="text-xl">N{price}</p>
-					<p className="text-xl text-slate-400 line-through">N{price}</p>
+					<p className="text-xl text-slate-400 line-through">
+						N{price + discount}
+					</p>
 					<h3 className=" bg-cyan-100 p-1 rounded-md text-cyan-500">
 						{getDiscountPercent(price, discount)}% off
 					</h3>

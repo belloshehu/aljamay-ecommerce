@@ -9,6 +9,7 @@ import SearchInput from "../form-fields/SearchInput";
 import { usePathname } from "next/navigation";
 import ProductFormDialog from "./AddProductDiaglog";
 import { useIsMobile } from "@/hooks/use-mobile";
+import CartNavItem from "../cart/CartNavItem";
 
 export default function ProductCategoryHeader() {
 	const form = useForm({
@@ -48,6 +49,7 @@ export default function ProductCategoryHeader() {
 								placeholder="Sort by"
 								register={register("sortBy")}
 							/>
+							<CartNavItem className="ml-2" />
 						</div>
 						<SearchInput
 							placeholder="Search product"

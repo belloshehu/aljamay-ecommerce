@@ -53,7 +53,7 @@ model User {
   createdAt     DateTime? @default(now())
   updatedAt     DateTime? @updatedAt
   products     Product[]
-
+  shippingAddresses ShippingAddress[]
 }
 enum Role {
   USER
@@ -85,4 +85,24 @@ model CartItem {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String    @unique @db.ObjectId
   quantity      Int       @default(1)
+}
+
+
+model ShippingAddress{
+  id            String    @id   @default(auto())  @map("_id")  @db.ObjectId
+  userId        String    @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName     String
+  lastName      String
+  addressLine1  String
+  addressLine2  String?
+  city          String
+  state         String
+  postalCode    String
+  country       String
+  phoneNumber   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isDefault     Boolean   @default(false)
+  isActive      Boolean   @default(true)
 }
