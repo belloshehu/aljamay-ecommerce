@@ -1,5 +1,5 @@
-import { ProductType } from "./product.types";
-import { ResponseType } from "./response.types";
+import { ProductType } from "@/types/product.types";
+import { ResponseType } from "@/types/response.types";
 
 export interface CartItemType {
 	product: ProductType;

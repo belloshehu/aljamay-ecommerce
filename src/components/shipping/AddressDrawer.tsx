@@ -1,17 +1,38 @@
+"use  client";
 import { Button } from "../ui/button";
 import {
 	Drawer,
 	DrawerContent,
+	DrawerDescription,
 	DrawerHeader,
 	DrawerTitle,
 	DrawerTrigger,
 } from "../ui/drawer";
 import ShippingAddressForm from "./ShippingAddressForm";
 import { ShipWheel, Container } from "lucide-react";
+import { ShippingAddressType } from "@/types/shipping.types";
+import { ScrollArea } from "../ui/scroll-area";
 
-export default function AddressDrawer() {
+interface AddressDrawerProps {
+	addressData?: ShippingAddressType | null;
+	drawerOpen: boolean;
+	handleToggleDrawer: () => void;
+}
+export default function AddressDrawer({
+	drawerOpen,
+	addressData,
+	handleToggleDrawer,
+}: AddressDrawerProps) {
 	return (
-		<Drawer direction="right">
+		<Drawer
+			direction="right"
+			open={drawerOpen}
+			onOpenChange={handleToggleDrawer}
+		>
+			<DrawerDescription hidden>
+				Manage your shipping address by adding, editing, or deleting addresses.
+				You can also set a default address for quick access during checkout.
+			</DrawerDescription>
 			<DrawerTrigger asChild>
 				<Button variant="outline" className="text-cyan-500">
 					<Container /> Add Shipping Address
@@ -24,7 +45,12 @@ export default function AddressDrawer() {
 						Shipping Address
 					</DrawerTitle>
 				</DrawerHeader>
-				<ShippingAddressForm />
+				<ScrollArea className="h-[96vh] p-5">
+					<ShippingAddressForm
+						postSubmitHandler={handleToggleDrawer}
+						defaultValues={addressData}
+					/>
+				</ScrollArea>
 			</DrawerContent>
 		</Drawer>
 	);

@@ -7,9 +7,11 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useGetCartItems } from "@/hooks/service-hooks/cart.service.hooks";
 import Loader from "../Loader";
+import { usePathname } from "next/navigation";
 
 export default function CheckoutSidebar({ className }: { className?: string }) {
 	const { data, isPending } = useGetCartItems();
+	const isCheckoutPage = usePathname() === "/products/checkout";
 
 	// Calculate total price using useMemo
 	const calculateTotalPrice = () => {

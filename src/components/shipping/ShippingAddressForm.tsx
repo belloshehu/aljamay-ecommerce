@@ -1,3 +1,4 @@
+"use client";
 import { useForm } from "react-hook-form";
 import { Form } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,8 +12,23 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import FormSelect from "../form-fields/FormSelect";
 import { statesInNigeria } from "@/constants/data";
+import {
+	useCreateShippingAddress,
+	useUpdateShippingAddress,
+} from "@/hooks/service-hooks/shipping.service.hooks";
+import Loader from "../Loader";
+import { ShippingAddressType } from "@/types/shipping.types";
 
-export default function ShippingAddressForm() {
+export default function ShippingAddressForm({
+	postSubmitHandler,
+	defaultValues,
+}: {
+	postSubmitHandler: () => void;
+	defaultValues?: ShippingAddressType | null;
+}) {
+	const { mutateAsync, isPending } = useCreateShippingAddress();
+	const { mutateAsync: updateAsyn, isPending: isPendingUpdate } =
+		useUpdateShippingAddress();
 	const form = useForm({
 		resolver: zodResolver(shippingValidationSchemas),
 		defaultValues: {
@@ -21,19 +37,27 @@ export default function ShippingAddressForm() {
 			country: "Nigeria",
 			isActive: true,
 			isDefault: true,
+			...defaultValues, // Use default values if provided
 		},
 	});
 
-	const isPending = false;
 	const {
 		control,
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = form;
 
 	const onSubmit = async (data: ShippingValidationSchemaType) => {
-		console.log("Form submitted successfully:", data);
+		if (defaultValues) {
+			// If defaultValues are provided, update the existing address
+			await updateAsyn({ payload: data, shippingAddressId: defaultValues.id });
+		} else {
+			await mutateAsync({ payload: data });
+		}
+		reset();
+		postSubmitHandler();
 	};
 
 	return (
@@ -67,22 +91,14 @@ export default function ShippingAddressForm() {
 				</div>
 				<FormInputField
 					control={control}
-					name="addressLine1"
-					label="Address Line 1"
+					name="streetAddress"
+					label="Street Address"
 					type="text"
-					id="addressLine1"
-					placeholder="Enter address line 1"
-					errorMessage={errors.addressLine1?.message}
+					id="streetAddress"
+					placeholder="Enter street address"
+					errorMessage={errors.streetAddress?.message}
 				/>
-				<FormInputField
-					control={control}
-					name="addressLine2"
-					label="Address Line 2"
-					type="text"
-					id="addressLine2"
-					placeholder="Enter address line 2 (optional)"
-					errorMessage={errors.addressLine2?.message}
-				/>
+
 				<div className="flex flex-col gap-5 md:flex-row w-full justify-between">
 					<FormInputField
 						control={control}
@@ -135,20 +151,30 @@ export default function ShippingAddressForm() {
 
 				<FormCheckbox
 					{...register("isDefault")}
-					label="You agree to receive marketing emails"
-					id="marketingAccepted"
+					label="Set as default address"
+					id="isDefault"
 					errorMessage={errors.isDefault?.message}
 				/>
+				{defaultValues && (
+					<FormCheckbox
+						{...register("isActive")}
+						label="Set as active address"
+						id="isActive"
+						errorMessage={errors.isActive?.message}
+					/>
+				)}
 
-				<Button
-					disabled={isPending}
-					className={cn("btn btn-primary w-full", {
-						"animate-pulse": isPending,
-					})}
-					type="submit"
-				>
-					{isPending ? "Saving..." : "Save Address"}
-				</Button>
+				{isPending ? (
+					<Loader message={defaultValues ? "updating..." : "Adding..."} />
+				) : (
+					<Button
+						disabled={isPending}
+						className={cn("btn btn-primary w-full")}
+						type="submit"
+					>
+						{defaultValues ? "Update Address" : "Add Address"}
+					</Button>
+				)}
 			</form>
 		</Form>
 	);

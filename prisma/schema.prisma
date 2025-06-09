@@ -94,8 +94,7 @@ model ShippingAddress{
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   firstName     String
   lastName      String
-  addressLine1  String
-  addressLine2  String?
+  streetAddress String
   city          String
   state         String
   postalCode    String

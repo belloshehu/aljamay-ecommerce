@@ -2,19 +2,33 @@
 import CartItem from "@/components/cart/CartItem";
 import Loader from "@/components/Loader";
 import AddressDrawer from "@/components/shipping/AddressDrawer";
-import { Button } from "@/components/ui/button";
+import ShippingAddress from "@/components/shipping/ShippingAddress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGetCartItems } from "@/hooks/service-hooks/cart.service.hooks";
-
+import { useGetAllShippingAdressesByUser } from "@/hooks/service-hooks/shipping.service.hooks";
+import { ShippingAddressType } from "@/types/shipping.types";
 import { useState } from "react";
 
 export default function CheckoutPage() {
 	const { data, isLoading } = useGetCartItems();
+	const { data: addresses, isLoading: loadingAddresses } =
+		useGetAllShippingAdressesByUser();
 	const [toggleAdressForm, setToggleAddressForm] = useState(false);
+	const [selectedAddress, setSelectedAddress] =
+		useState<ShippingAddressType | null>(null);
 
 	const handleToggleAddressForm = () => {
 		setToggleAddressForm((prev) => !prev);
 	};
+
+	const handleEditAddress = (address: ShippingAddressType) => {
+		if (address) {
+			setSelectedAddress(address);
+			handleToggleAddressForm();
+			console.log("Selected address for editing:", address);
+		}
+	};
+
 	if (isLoading) {
 		return (
 			<div className="w-full h-[80vh] flex items-center justify-center">
@@ -42,22 +56,43 @@ export default function CheckoutPage() {
 						{toggleAdressForm ? <SidebarClose /> : <Menu />} Add shipping
 						Address
 					</Button> */}
-					<AddressDrawer />
+					<AddressDrawer
+						drawerOpen={toggleAdressForm}
+						handleToggleDrawer={handleToggleAddressForm}
+						addressData={selectedAddress}
+					/>
 				</div>
+				<ScrollArea className="w-full md:max-h-[300px]">
+					{loadingAddresses ? (
+						<Loader />
+					) : (
+						addresses?.map((address) => (
+							<ShippingAddress
+								{...address}
+								key={address.id}
+								handleEdit={() => handleEditAddress(address)}
+							/>
+						))
+					)}
+				</ScrollArea>
 			</div>
 
 			<section className="w-full gap-5 flex flex-col my-10">
+				<div className="flex justify-start items-start">
+					<h1 className="text-xl font-semibold ">Order Items</h1>
+				</div>
 				<ScrollArea className="w-full md:max-h-[500px]">
 					{data.map((item) => (
 						<CartItem {...item} key={item.id} />
 					))}
 				</ScrollArea>
-				<Button
-					className="bg-gradient-to-b from-green-800 to-cyan-500"
-					size={"lg"}
-				>
-					Submit order
-				</Button>
+			</section>
+
+			<section className="w-full gap-5 flex flex-col my-10">
+				<div className="flex justify-start items-start">
+					<h1 className="text-xl font-semibold ">Payment methods</h1>
+				</div>
+				<ScrollArea className="w-full md:max-h-[500px]"></ScrollArea>
 			</section>
 		</section>
 	);
