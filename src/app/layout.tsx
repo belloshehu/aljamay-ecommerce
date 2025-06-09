@@ -7,6 +7,7 @@ import AuthContextProvider from "@/providers/AuthContext";
 import { auth } from "../../auth";
 import { Session } from "next-auth";
 import CustomQueryClientProvider from "@/providers/CustomQueryClientProvider";
+import { alfa_Slab_One } from "@/app/fonts";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -54,7 +55,7 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${alfa_Slab_One.variable} ${geistMono.variable} antialiased`}
 			>
 				<CustomQueryClientProvider>
 					<AuthContextProvider>

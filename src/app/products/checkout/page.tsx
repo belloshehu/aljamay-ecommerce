@@ -19,13 +19,15 @@ export default function CheckoutPage() {
 
 	const handleToggleAddressForm = () => {
 		setToggleAddressForm((prev) => !prev);
+		if (toggleAdressForm) {
+			setSelectedAddress(null); // Reset selected address when closing the form
+		}
 	};
 
 	const handleEditAddress = (address: ShippingAddressType) => {
 		if (address) {
 			setSelectedAddress(address);
 			handleToggleAddressForm();
-			console.log("Selected address for editing:", address);
 		}
 	};
 

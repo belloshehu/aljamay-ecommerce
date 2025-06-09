@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 			!state ||
 			!streetAddress ||
 			!postalCode ||
-			!isDefault ||
+			isDefault === undefined ||
 			!phoneNumber
 		) {
 			return NextResponse.json(

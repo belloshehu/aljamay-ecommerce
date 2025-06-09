@@ -23,6 +23,9 @@ export default function ShippingAddress({
 	className,
 	handleEdit,
 }: ShippingAddressProps) {
+	const handleDelete = () => {
+		// Implement delete functionality here
+	};
 	return (
 		<Card
 			className={cn(
@@ -50,15 +53,16 @@ export default function ShippingAddress({
 						Active
 					</Badge>
 				)}
-				<Button
-					variant={"ghost"}
-					className="ml-auto"
-					onClick={() => {
-						handleEdit && handleEdit();
-					}}
-				>
-					<Edit size={16} />
-				</Button>
+				<div className="flex items-center gap-2 ml-auto">
+					<Button
+						variant={"ghost"}
+						onClick={() => {
+							handleEdit && handleEdit();
+						}}
+					>
+						<Edit size={16} />
+					</Button>
+				</div>
 			</div>
 		</Card>
 	);

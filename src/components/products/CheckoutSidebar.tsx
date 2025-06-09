@@ -7,11 +7,9 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useGetCartItems } from "@/hooks/service-hooks/cart.service.hooks";
 import Loader from "../Loader";
-import { usePathname } from "next/navigation";
 
 export default function CheckoutSidebar({ className }: { className?: string }) {
 	const { data, isPending } = useGetCartItems();
-	const isCheckoutPage = usePathname() === "/products/checkout";
 
 	// Calculate total price using useMemo
 	const calculateTotalPrice = () => {
@@ -31,7 +29,7 @@ export default function CheckoutSidebar({ className }: { className?: string }) {
 	return (
 		<aside
 			className={cn(
-				"w-full p-4 flex flex-col gap-5 items-start justify-start bg-white border-slate-200 rounded-lg border-[1px] my-10 md:m-0 md:h-[80vh]",
+				"col-span-2 w-full p-4 flex flex-col gap-5 items-start justify-start bg-white border-slate-200 rounded-lg border-[1px] my-10 md:m-0 md:h-[80vh]",
 				className
 			)}
 		>

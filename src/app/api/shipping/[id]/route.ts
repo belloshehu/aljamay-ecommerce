@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
 	req: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
 		const session = await auth();
@@ -18,7 +18,8 @@ export async function PATCH(
 				}
 			);
 		}
-		const shippingAddressId = params.id;
+		const { id } = await params;
+		const shippingAddressId = id;
 		const body = await req.json();
 		const {
 			firstName,
@@ -40,9 +41,9 @@ export async function PATCH(
 			!state ||
 			!streetAddress ||
 			!postalCode ||
-			!isDefault ||
 			!phoneNumber ||
-			!isActive
+			isActive === undefined ||
+			isDefault === undefined
 		) {
 			return NextResponse.json(
 				{
@@ -81,6 +82,7 @@ export async function PATCH(
 			}
 		);
 	} catch (error) {
+		console.error("Error updating shipping address:", error);
 		return NextResponse.json(
 			{
 				error: "An error occurred while updating the shipping address.",

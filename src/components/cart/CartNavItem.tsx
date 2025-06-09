@@ -8,7 +8,7 @@ const CartNavItem = ({ className }: { className?: string }) => {
 	return (
 		<Link
 			className="relative flex items-center justify-center gap-2"
-			href={"products/cart"}
+			href={"/products/cart"}
 		>
 			<span
 				className={cn(

@@ -10,7 +10,7 @@ export const useGetAllShippingAdressesByUser = () => {
 	});
 };
 
-export const useGetAllShippingAdress = ({
+export const useGetShippingAdress = ({
 	shippingAddressId,
 }: {
 	shippingAddressId: string;
@@ -18,6 +18,13 @@ export const useGetAllShippingAdress = ({
 	return useQuery({
 		queryFn: async () =>
 			ShippingServiceAPI.getShippingAddress({ shippingAddressId }),
+		queryKey: ["shipping-address"],
+	});
+};
+
+export const useGetDefaultShippingAddress = () => {
+	return useQuery({
+		queryFn: async () => ShippingServiceAPI.getDefaultShippingAddress(),
 		queryKey: ["shipping-address"],
 	});
 };

@@ -9,7 +9,7 @@ import {
 	DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "./ui/button";
-import { ChevronRight, Home, MenuIcon } from "lucide-react";
+import { ChevronRight, MenuIcon } from "lucide-react";
 import Brand from "@/components/Brand";
 import { motion } from "motion/react";
 import Link from "next/link";

@@ -7,13 +7,22 @@ import { useGetCartItems } from "@/hooks/service-hooks/cart.service.hooks";
 import Loader from "../Loader";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
+import usePayment from "@/hooks/use-payment";
+import { makeFlutterwareConfig } from "@/config/flutterwave.config";
+import { Session } from "next-auth";
+import { useGetDefaultShippingAddress } from "@/hooks/service-hooks/shipping.service.hooks";
 
 export default function OrderSummarySidebar({
 	className,
+	session,
 }: {
 	className?: string;
+	session: Session;
 }) {
 	const { data, isPending } = useGetCartItems();
+	const { useCustomFlutterwave } = usePayment();
+	const { isPending: isPendingShipping, data: defaultAddress } =
+		useGetDefaultShippingAddress();
 
 	// Calculate total price using useMemo
 	const calculateTotalPrice = () => {
@@ -34,6 +43,36 @@ export default function OrderSummarySidebar({
 
 	const totalPrice = useMemo(calculateTotalPrice, [data]);
 	const totalDiscount = useMemo(calculateTotalDiscount, [data]);
+	const { closePaymentModal, handleFlutterPayment } = useCustomFlutterwave(
+		makeFlutterwareConfig({
+			amount: totalPrice,
+			currency: "NGN",
+			customer: {
+				email: session.user?.email!,
+				name: `${session?.user.firstName} ${session?.user.lastName}`,
+				phone_number: defaultAddress?.phoneNumber!,
+			},
+			customizations: {
+				title: "Order payment",
+				description: "Payment for order",
+			},
+		})
+	);
+	const handleCheckout = async () => {
+		const response = handleFlutterPayment({
+			callback: (response: any) => {
+				if (response.status === "successful") {
+					// Handle successful payment
+					alert("Payment successful!");
+				} else {
+					// Handle failed payment
+					alert("Payment failed. Please try again.");
+				}
+				closePaymentModal();
+			},
+			onClose: closePaymentModal,
+		});
+	};
 
 	if (isPending) {
 		return <Loader message="loading cart items " />;
@@ -92,6 +131,10 @@ export default function OrderSummarySidebar({
 			<Button
 				className="bg-gradient-to-br from-green-800 to-cyan-500 w-full"
 				size={"lg"}
+				onClick={handleCheckout}
+				disabled={
+					isPendingShipping || isPending || !data?.length || !defaultAddress
+				}
 			>
 				Submit Order
 			</Button>

@@ -54,6 +54,7 @@ model User {
   updatedAt     DateTime? @updatedAt
   products     Product[]
   shippingAddresses ShippingAddress[]
+  orders       Order[]
 }
 enum Role {
   USER
@@ -76,6 +77,9 @@ model Product {
   isAvailable   Boolean  @default(true)
   user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String   @db.ObjectId
+  orders        Order[]  @relation( fields: [orderIds], references: [id])
+  orderIds     String[]  @db.ObjectId
+
 }
 
 model CartItem {
@@ -104,4 +108,35 @@ model ShippingAddress{
   updatedAt     DateTime @updatedAt
   isDefault     Boolean   @default(false)
   isActive      Boolean   @default(true)
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+
+model Order{
+  id            String    @id   @default(auto())  @map("_id")  @db.ObjectId
+  userId        String    @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shippingAddressId String @db.ObjectId
+  productIds     String[]  @db.ObjectId
+  products      Product[] @relation(fields: [productIds], references: [id])
+  totalAmount   Int
+  status        OrderStatus    @default(PENDING) // PENDING, SHIPPED, DELIVERED, CANCELLED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  paymentMethod String? // e.g., "CREDIT_CARD", "PAYPAL"
+  paymentStatus PaymentStatus @default(PENDING) // e.g., "PENDING", "COMPLETED", "FAILED"
+  trackingNumber String? // For shipping tracking
+  trackingUrl   String? // URL for tracking the shipment
 }

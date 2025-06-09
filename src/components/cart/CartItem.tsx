@@ -1,9 +1,6 @@
 "use client";
 import Link from "next/link";
-import {
-	getDiscountPercent,
-	getPriceWithoutDiscount,
-} from "@/lib/product.utils";
+import { getDiscountPercent } from "@/lib/product.utils";
 
 import React from "react";
 import { CartItemType as CartItemProps } from "@/types/cart.types";
@@ -11,6 +8,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { ProductQuantityField } from "../products/ProductQuantityField";
 import { useRemoveFromCart } from "@/hooks/service-hooks/cart.service.hooks";
+import { Card } from "../ui/card";
 
 const CartItem = ({
 	id,
@@ -23,7 +21,7 @@ const CartItem = ({
 		mutate({ productId: id });
 	};
 	return (
-		<div className="w-full border-[1px] border-cyan-200 flex gap-y-5 flex-col items-center justify-center md:flex-row md:justify-start md:gap-x-8">
+		<Card className="w-full border-[1px] border-cyan-200 flex gap-y-5 flex-col items-center justify-center md:flex-row md:justify-start md:gap-x-8">
 			<Image
 				src={image}
 				alt={name}
@@ -46,23 +44,25 @@ const CartItem = ({
 				</div>
 				<p>{stock} left</p>
 
-				<ProductQuantityField defaultQuantity={quantity} cartItemId={id} />
-				<div className="flex  gap-3 w-full">
-					<Link href="/products/checkout">
-						<Button className="bg-gradient-to-r from-green-800 text-center to-cyan-500 shadow-lg text-white font-semibold ">
-							Checkout
+				<div className="w-full flex flex-col md:flex-row items-start justify-start gap-3">
+					<ProductQuantityField defaultQuantity={quantity} cartItemId={id} />
+					<div className="flex  gap-3  md:ml-auto">
+						<Link href="/products/checkout">
+							<Button className="bg-gradient-to-r from-green-800 text-center to-cyan-500 shadow-lg text-white font-semibold ">
+								Checkout
+							</Button>
+						</Link>
+						<Button
+							disabled={isPending}
+							onClick={handleRemoveFromCart}
+							className="bg-gradient-to-r border-2 border-cyan-500 text-center shadow-lg text-cyan-500 font-semibold"
+						>
+							Remove
 						</Button>
-					</Link>
-					<Button
-						disabled={isPending}
-						onClick={handleRemoveFromCart}
-						className="bg-gradient-to-r border-2 border-cyan-500 text-center shadow-lg text-cyan-500 font-semibold"
-					>
-						Remove
-					</Button>
+					</div>
 				</div>
 			</div>
-		</div>
+		</Card>
 	);
 };
 

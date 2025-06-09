@@ -20,7 +20,7 @@ interface AddressDrawerProps {
 }
 export default function AddressDrawer({
 	drawerOpen,
-	addressData,
+	addressData = null,
 	handleToggleDrawer,
 }: AddressDrawerProps) {
 	return (
@@ -45,7 +45,7 @@ export default function AddressDrawer({
 						Shipping Address
 					</DrawerTitle>
 				</DrawerHeader>
-				<ScrollArea className="h-[96vh] p-5">
+				<ScrollArea className="h-[96vh] p-5 pb-16">
 					<ShippingAddressForm
 						postSubmitHandler={handleToggleDrawer}
 						defaultValues={addressData}
