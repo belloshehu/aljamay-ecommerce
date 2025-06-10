@@ -13,6 +13,10 @@ export interface ProductType {
 	updatedAt: Date;
 }
 
-export interface ProductResponseType extends ResponseType<ProductType> {
+export interface ProductResponseType extends ResponseType<ProductType[]> {
+	data: ProductType[];
+}
+
+export interface SingleProductResponseType extends ResponseType<ProductType> {
 	data: ProductType;
 }

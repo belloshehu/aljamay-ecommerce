@@ -8,6 +8,8 @@ import { getDiscountPercent } from "@/lib/product.utils";
 import useRenderFeatures from "@/hooks/use-render-features";
 import ProductActionDialog from "./ProductActionDialog";
 import { useDeleteProduct } from "@/hooks/service-hooks/product.service.hooks";
+import { Card } from "../ui/card";
+import { Badge } from "../ui/badge";
 
 interface ProductProps {
 	product: ProductType;
@@ -24,7 +26,7 @@ export default function Product({ product }: ProductProps) {
 	);
 
 	const router = useRouter();
-	const { id, name, image, price, discount, description } = product;
+	const { id, name, image, price, discount, description, quantity } = product;
 
 	const handleAddToShoppingCart = () => {};
 
@@ -40,7 +42,7 @@ export default function Product({ product }: ProductProps) {
 	};
 
 	return (
-		<article className="relative flex group flex-col gap-2 w-full shadow-none hover:shadow-lg hover:scale-105 duration-200 transition-all">
+		<Card className="relative flex group flex-col gap-2 w-full shadow-none hover:shadow-lg hover:scale-105 duration-200 transition-all h-fit">
 			<Image
 				src={image}
 				width={300}
@@ -67,7 +69,7 @@ export default function Product({ product }: ProductProps) {
 				</div>
 			)}
 
-			<div className=" flex flex-col w-full">
+			<div className=" flex flex-col w-full p-2">
 				<div className="flex items-center justify-start gap-2 p-1">
 					<p>
 						<span className="uppercase">{name} - </span>
@@ -95,6 +97,7 @@ export default function Product({ product }: ProductProps) {
 						<ShoppingCart size={24} className="text-xl text-cyan-900" />
 					</div>
 				</div>
+				<Badge className="my-2">{quantity} in stock</Badge>
 
 				{/* Rended Order button if not disabled */}
 				{!disabledFeatures?.orderProduct && (
@@ -125,6 +128,6 @@ export default function Product({ product }: ProductProps) {
 					/>
 				)}
 			</div>
-		</article>
+		</Card>
 	);
 }

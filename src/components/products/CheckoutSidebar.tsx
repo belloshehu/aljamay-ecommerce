@@ -15,7 +15,7 @@ export default function CheckoutSidebar({ className }: { className?: string }) {
 	const calculateTotalPrice = () => {
 		if (!data || data.length === 0) return 0;
 		return data.reduce((total, item) => {
-			const itemPrice = item.product.price - item.product.discount;
+			const itemPrice = item.product.price;
 			return total + itemPrice * item.quantity;
 		}, 0);
 	};

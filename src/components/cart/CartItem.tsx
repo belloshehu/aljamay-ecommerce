@@ -31,7 +31,7 @@ const CartItem = ({
 			/>
 			<div className="w-full flex flex-col gap-2 p-5">
 				<Link href={`/products/${id}`}>
-					<h1 className="text-xl md:text-3xl font-semibold">{name}</h1>
+					<h3 className="text-xl font-semibold">{name}</h3>
 				</Link>
 				<div className="flex items-center justify-start gap-5 p-0">
 					<p className="text-xl">N{price}</p>

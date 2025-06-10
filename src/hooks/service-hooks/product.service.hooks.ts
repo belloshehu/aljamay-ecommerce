@@ -1,6 +1,14 @@
 import ProductServiceAPI from "@/services/product.services";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+export const useGetProducts = ({ limit = 20, offset = 0, search = "" }) => {
+	return useQuery({
+		queryKey: ["products", { limit, offset, search }],
+		queryFn: async () =>
+			ProductServiceAPI.getProducts({ limit, offset, search }),
+	});
+};
+
 export const useGetProductById = (productId: string) => {
 	return useQuery({
 		queryKey: ["product", productId],

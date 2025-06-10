@@ -30,3 +30,26 @@ export async function POST(request: NextRequest) {
 		);
 	}
 }
+
+export async function GET(request: NextRequest) {
+	try {
+		const products = await prisma.product.findMany({
+			orderBy: {
+				createdAt: "desc",
+			},
+		});
+		return NextResponse.json(
+			{ data: products, message: "Products fetched successfully" },
+			{ status: 200 }
+		);
+	} catch (error) {
+		console.error("Error fetching products:", error);
+		return NextResponse.json(
+			{
+				message: "Failed to fetch products",
+				error: error instanceof Error ? error.message : "Unknown error",
+			},
+			{ status: 500 }
+		);
+	}
+}

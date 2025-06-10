@@ -1,16 +1,20 @@
 "use client";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { useGetCartItems } from "@/hooks/service-hooks/cart.service.hooks";
-import Loader from "../Loader";
-import { Separator } from "../ui/separator";
+import Loader from "@/components/Loader";
+import { Separator } from "@/components/ui/separator";
 import { Input } from "../ui/input";
 import usePayment from "@/hooks/use-payment";
 import { makeFlutterwareConfig } from "@/config/flutterwave.config";
 import { Session } from "next-auth";
-import { useGetDefaultShippingAddress } from "@/hooks/service-hooks/shipping.service.hooks";
+import { useGetAllShippingAdressesByUser } from "@/hooks/service-hooks/shipping.service.hooks";
+import { useCreateOrder } from "@/hooks/service-hooks/order.service.hooks";
+import { toast } from "sonner";
+import { FlutterWaveResponse } from "flutterwave-react-v3/dist/types";
+import { useRouter } from "next/navigation";
 
 export default function OrderSummarySidebar({
 	className,
@@ -20,15 +24,19 @@ export default function OrderSummarySidebar({
 	session: Session;
 }) {
 	const { data, isPending } = useGetCartItems();
+	const { mutateAsync, isPending: isCreatingOrder } = useCreateOrder();
 	const { useCustomFlutterwave } = usePayment();
-	const { isPending: isPendingShipping, data: defaultAddress } =
-		useGetDefaultShippingAddress();
+	const { isPending: isPendingShipping, data: shippingAddress } =
+		useGetAllShippingAdressesByUser();
+	const router = useRouter();
+
+	const defaultAddress = shippingAddress?.find((address) => address.isDefault);
 
 	// Calculate total price using useMemo
 	const calculateTotalPrice = () => {
 		if (!data || data.length === 0) return 0;
 		return data.reduce((total, item) => {
-			const itemPrice = item.product.price - item.product.discount;
+			const itemPrice = item.product.price;
 			return total + itemPrice * item.quantity;
 		}, 0);
 	};
@@ -58,15 +66,30 @@ export default function OrderSummarySidebar({
 			},
 		})
 	);
+
 	const handleCheckout = async () => {
-		const response = handleFlutterPayment({
-			callback: (response: any) => {
+		handleFlutterPayment({
+			callback: (response: FlutterWaveResponse) => {
 				if (response.status === "successful") {
 					// Handle successful payment
-					alert("Payment successful!");
+					toast.success("Payment successful!");
+					mutateAsync({
+						cartItems: data?.map((item) => item.id)!,
+						shippingAddressId: defaultAddress?.id!,
+						paymentMethod: "flutterwave",
+						totalAmount: totalPrice - totalDiscount + 0, // Assuming shipping cost is 0
+					})
+						.then(() => {
+							toast.success("Order created successfully!");
+							router.push("/dashboard/orders");
+						})
+						.catch((error) => {
+							console.log("Error creating order:", error);
+							toast.error("Error creating order: " + error.message);
+						});
 				} else {
 					// Handle failed payment
-					alert("Payment failed. Please try again.");
+					toast.error("Payment failed. Please try again.");
 				}
 				closePaymentModal();
 			},
@@ -124,7 +147,7 @@ export default function OrderSummarySidebar({
 				<p>Total cost:</p>
 				<h1 className="font-semibold text-xl">
 					<span className="line-through"> N</span>
-					{totalPrice - totalDiscount}
+					{totalPrice}
 				</h1>
 			</div>
 
