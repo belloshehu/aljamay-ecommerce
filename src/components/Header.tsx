@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import NavigationDrawer from "./NavigationDrawer";
 import ProfileDropdownMenu from "./ProfileDropdownMenu";
 import { Session } from "next-auth";
+import Image from "next/image";
 
 const righteous = Righteous({ subsets: ["latin"], weight: ["400"] });
 
@@ -22,19 +23,29 @@ export default function Header({ session }: { session: Session }) {
 	}
 
 	return (
-		<header className="bg-gradient-to-tr from-green-800 to-cyan-500 flex flex-row items-center w-full justify-between text-white  px-3 py-2  lg:px-16">
+		<header className=" bg-[#ADF802] flex flex-row items-center w-full justify-between text-white  px-3 py-2  lg:px-16">
 			<div className="brand">
 				<Link href={"/"}>
-					<h1
+					{/* <h1
 						className={`${righteous.className} font-bold text-xl lg:text-3xl shadow-lg`}
 					>
 						Aljamay
-					</h1>
+					</h1> */}
+					<Image
+						src={"/logo.png"}
+						alt="logo"
+						height={50}
+						width={100}
+						className="object-cover"
+					/>
 				</Link>
 			</div>
 			<Navbar />
 			<div className="block lg:hidden">
-				<CartNavItem />
+				<CartNavItem
+					iconClassName="text-white"
+					className="bg-white text-[#ADF802]"
+				/>
 			</div>
 			{!isMobile &&
 				(session?.user ? (
@@ -44,7 +55,7 @@ export default function Header({ session }: { session: Session }) {
 						<Button
 							variant={"default"}
 							size={"lg"}
-							className="bg-gradient-to-bl from-cyan-800 to-green-600 hover:from-cyan-700 hover:to-green-500"
+							className="bg-[#ADF802] hover:from-cyan-700 hover:to-green-500"
 						>
 							Login
 						</Button>

@@ -1,6 +1,4 @@
 "use client";
-import FormSelect from "../form-fields/FormSelect";
-import { productCategories, productSortOptions } from "@/constants/data";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { producCategoryAndFilterSchema } from "@/schemas/product.validation.schema";
@@ -10,6 +8,7 @@ import { usePathname } from "next/navigation";
 import ProductFormDialog from "./AddProductDiaglog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CartNavItem from "../cart/CartNavItem";
+import CategoryNavbar from "./CategoryNavbar";
 
 export default function ProductCategoryHeader() {
 	const form = useForm({
@@ -19,14 +18,18 @@ export default function ProductCategoryHeader() {
 			sortBy: undefined,
 		},
 	});
-	const { control, register } = form;
+	const { control, register, handleSubmit } = form;
 	const pathname = usePathname();
 	const isMobile = useIsMobile();
+	const onSubmit = (data: any) => {};
 
 	return (
 		<header className="w-full flex justify-center items-center h-fit">
 			<Form {...form}>
-				<form className="flex justify-center items-center gap-4 p-5 w-full">
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="flex justify-center items-center gap-4 p-5 w-full"
+				>
 					<div className="flex flex-col-reverse md:flex-row items-center justify-center gap-5 capitalize w-full">
 						<div className="flex flex-row items-center gap-4">
 							{pathname === "/dashboard/products" && (
@@ -35,7 +38,7 @@ export default function ProductCategoryHeader() {
 									heading="Add Product"
 								/>
 							)}
-							<FormSelect
+							{/* <FormSelect
 								control={control}
 								options={productCategories}
 								className="w-full"
@@ -48,8 +51,10 @@ export default function ProductCategoryHeader() {
 								options={productSortOptions}
 								placeholder="Sort by"
 								register={register("sortBy")}
-							/>
-							<CartNavItem className="ml-2" />
+							/> */}
+							{!isMobile && <CartNavItem className="mx-5" />}
+
+							<CategoryNavbar />
 						</div>
 						<SearchInput
 							placeholder="Search product"

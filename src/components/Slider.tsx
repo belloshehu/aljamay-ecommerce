@@ -20,6 +20,7 @@ export default function Slider() {
 						source: "/images/spices.jpg",
 					},
 				]}
+				className="w-full h-[200px] md:h-[250px] aspect-square object-cover rounded-md shadow-lg"
 			/>
 		</div>
 	);

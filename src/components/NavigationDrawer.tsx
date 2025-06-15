@@ -122,7 +122,7 @@ export default function NavigationDrawer({ session }: { session: Session }) {
 									await signOut();
 									setToggleDrawer(false);
 								}}
-								className="w-full bg-gradient-to-br from-green-800 to-cyan-600"
+								className="w-full bg-[#ADF802] text-black"
 							>
 								Logout
 							</Button>

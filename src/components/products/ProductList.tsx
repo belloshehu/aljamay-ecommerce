@@ -1,6 +1,7 @@
 import { ProductType } from "@/types/product.types";
 import Product from "./Product";
 import Loader from "../Loader";
+import { ProductListSkeleton } from "./skeletons/ProductSkeleton";
 
 export default function ProductList({
 	products,
@@ -10,7 +11,7 @@ export default function ProductList({
 	products: ProductType[];
 	isLoading?: boolean;
 }) {
-	if (isLoading) return <Loader message="Loading products" />;
+	if (isLoading) return <ProductListSkeleton />;
 	if (!products || products.length === 0) {
 		return (
 			<section className="w-full p-5 md:p-20">

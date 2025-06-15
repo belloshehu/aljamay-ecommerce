@@ -6,9 +6,16 @@ import {
 	Josefin_Slab,
 	Jura,
 	Alfa_Slab_One,
+	Allura,
 } from "next/font/google";
 
 // Configure font with subsets and weights
+export const allura = Allura({
+	subsets: ["latin"],
+	weight: ["400"],
+	variable: "--font-allura",
+});
+
 export const inter = Inter({
 	subsets: ["latin"],
 	weight: ["400", "700"],

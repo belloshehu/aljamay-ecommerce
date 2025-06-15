@@ -1,4 +1,5 @@
 import { SelectDataType } from "@/types/data.types";
+import { IconType } from "../../public";
 
 export const carousel = [
 	{
@@ -73,19 +74,6 @@ export const productCategories: SelectDataType[] = [
 		label: "Spicies",
 		value: "spicies",
 	},
-	// , {
-	// 	label: "Cookies",
-	// 	value: "cookies",
-	// }, {
-	// 	label: "Pies",
-	// 	value: "pies",
-	// }, {
-	// 	label: "Cupcakes",
-	// 	value: "cupcakes",
-	// }, {
-	// 	label: "Donuts",
-	// 	value: "donuts",
-	// 	}
 ];
 
 export const productSortOptions: SelectDataType[] = [
@@ -149,4 +137,27 @@ export const statesInNigeria: SelectDataType[] = [
 	{ label: "Yobe", value: "Yobe" },
 	{ label: "Zamfara", value: "Zamfara" },
 	{ label: "Abuja", value: "Abuja" },
+];
+
+export const productCategoriesWithImages: {
+	name: string;
+	icon: IconType;
+}[] = [
+	{
+		name: "All",
+		icon: "all-categories",
+	},
+	{
+		name: "Bread",
+		icon: "bread",
+	},
+	{
+		name: "Spices",
+		icon: "spice",
+	},
+
+	{
+		name: "Tea",
+		icon: "tea",
+	},
 ];

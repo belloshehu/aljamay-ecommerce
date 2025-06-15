@@ -13,7 +13,7 @@ export default async function ProfilePage() {
 			{/* <h1 className="text-2xl font-bold mb-4">Users ({users.length})</h1> */}
 			{/* Add more dashboard content here */}
 			<section className="w-full flex flex-col gap-6">
-				<Card className="bg-gradient-to-b from-cyan-500 to-green-700 text-white">
+				<Card className="bg-[#eee] text-black">
 					<CardHeader>
 						<div className="flex items-center gap-4">
 							<h2 className="text-lg font-semibold">
@@ -27,7 +27,7 @@ export default async function ProfilePage() {
 								className="ml-auto"
 							/>
 						</div>
-						<p className="text-sm text-slate-200">{email}</p>
+						<p className="text-sm text-slate-600">{email}</p>
 					</CardHeader>
 				</Card>
 

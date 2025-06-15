@@ -30,9 +30,7 @@ export default function ProductFormDialog({
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button className="bg-gradient-to-br from-green-700 to-cyan-700">
-					{triggerBtnText}
-				</Button>
+				<Button className="bg-[#ADF802] text-black">{triggerBtnText}</Button>
 			</DialogTrigger>
 
 			<DialogContent className="h-[80vh] overflow-y-auto">

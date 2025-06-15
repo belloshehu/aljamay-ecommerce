@@ -115,9 +115,7 @@ export default function OrderSummarySidebar({
 
 			<div className="w-full flex items-center justify-between gap-2">
 				<Input placeholder="Enter coupon code" />
-				<Button className="bg-gradient-to-b from-cyan-600 to-green-700">
-					Apply
-				</Button>
+				<Button className="bg-[#ADF802] text-black">Apply</Button>
 			</div>
 			<div className="w-full flex items-center justify-between gap-2">
 				<p>Total item (s) cost:</p>
@@ -152,7 +150,7 @@ export default function OrderSummarySidebar({
 			</div>
 
 			<Button
-				className="bg-gradient-to-br from-green-800 to-cyan-500 w-full"
+				className="bg-[#ADF802] text-black w-full"
 				size={"lg"}
 				onClick={handleCheckout}
 				disabled={

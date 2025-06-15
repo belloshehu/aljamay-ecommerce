@@ -34,14 +34,14 @@ export default function AddressDrawer({
 				You can also set a default address for quick access during checkout.
 			</DrawerDescription>
 			<DrawerTrigger asChild>
-				<Button variant="outline" className="text-cyan-500">
+				<Button variant="outline" className="text-[#ADF802]">
 					<Container /> Add Shipping Address
 				</Button>
 			</DrawerTrigger>
 			<DrawerContent className="w-full md:w-[500px]">
 				<DrawerHeader>
 					<DrawerTitle className="flex items-center gap-2">
-						<ShipWheel className="text-cyan-500" />
+						<ShipWheel className="text-[#ADF802]" />
 						Shipping Address
 					</DrawerTitle>
 				</DrawerHeader>

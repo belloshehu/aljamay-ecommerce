@@ -26,7 +26,7 @@ export default function OrderListHeader({
 				{OrderItemsCount} item(s) | <span className="line-through">N</span>{" "}
 				{totalAmount}
 			</h2>
-			<h3 className="text-lg font-semibold text-cyan-500">{status}</h3>
+			<h3 className="text-lg font-semibold text-[#ADF802]">{status}</h3>
 		</header>
 	);
 }

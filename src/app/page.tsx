@@ -12,7 +12,10 @@ export default function Home() {
 	});
 
 	return (
-		<main className="flex min-h-screen flex-col gap-10 items-center">
+		<main className="flex min-h-screen flex-col gap-0  items-center">
+			{data && data.length > 0 && <ProductCategoryHeader />}
+			{/* <CategoryNavbar /> */}
+
 			<Hero />
 			{/* <Suspense
 				fallback={
@@ -25,7 +28,6 @@ export default function Home() {
 			</Suspense> */}
 			{/* <Values /> */}
 			{/* <Promotion /> */}
-			<ProductCategoryHeader />
 			<ProductList products={data!} isLoading={isLoading} />
 		</main>
 	);

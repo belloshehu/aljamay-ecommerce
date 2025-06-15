@@ -48,7 +48,7 @@ export default function Product({ product }: ProductProps) {
 				width={300}
 				height={200}
 				alt={name}
-				className=" rounded-t-md w-full h-[200px] aspect-square object-cover cursor-pointer"
+				className=" rounded-t-md w-full h-[200px] aspect-square object-contain cursor-pointer"
 				onClick={handleProductClick}
 			/>
 			{/* displays status of product whether it is available or not */}
@@ -85,12 +85,12 @@ export default function Product({ product }: ProductProps) {
 							</h4>
 						</Link>
 
-						<h6 className="line-through text-cyan-800">
+						<h6 className="line-through text-[#B6EE56]">
 							{getDiscountPercent(price, discount)} %
 						</h6>
 					</div>
 					<div
-						className="flex items-center justify-between gap-3 px-2 cursor-pointer bg-cyan-200 p-1 rounded-2xl"
+						className="flex items-center justify-between gap-3 px-2 cursor-pointer bg-[#B6EE56] p-1 rounded-2xl"
 						onClick={handleAddToShoppingCart}
 					>
 						<small className="hidden md:flex">add to cart</small>
@@ -103,7 +103,7 @@ export default function Product({ product }: ProductProps) {
 				{!disabledFeatures?.orderProduct && (
 					<Link
 						href={`order/${id}`}
-						className="scale-0 group-hover:scale-[98%] w-full p-2 px-7 text-center bg-gradient-to-r from-green-400 to-cyan-500 font-semibold text-white shadow-md duration-150 transition-transform"
+						className="scale-0 group-hover:scale-[98%] w-full p-2 px-7 text-center bg-[#ADF802] font-semibold text-black shadow-md duration-150 transition-transform"
 					>
 						Order now
 					</Link>

@@ -34,7 +34,7 @@ export default function CheckoutSidebar({ className }: { className?: string }) {
 			)}
 		>
 			<h3 className="text-xl font-semibold flex items-center gap-2">
-				<ShoppingCart className="text-cyan-300" />
+				<ShoppingCart className="text-[#ADF802]" />
 				{data?.length || 0} items
 			</h3>
 
@@ -44,10 +44,7 @@ export default function CheckoutSidebar({ className }: { className?: string }) {
 			</h1>
 
 			<Link href="/products/checkout" className="w-full">
-				<Button
-					className="bg-gradient-to-br from-green-800 to-cyan-500 w-full"
-					size={"lg"}
-				>
+				<Button className="bg-[#ADF802] text-black w-full" size={"lg"}>
 					Checkout
 				</Button>
 			</Link>

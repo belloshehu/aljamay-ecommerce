@@ -34,7 +34,7 @@ export default function ShippingAddress({
 			)}
 		>
 			<header className="flex flex-row items-center justify-between gap-1">
-				<h2 className="text-cyan-600 text-xl font-semibold">
+				<h2 className="text-black text-xl font-semibold">
 					{firstName} {lastName}
 				</h2>
 				<small className="text-gray-500 flex items-center gap-1">

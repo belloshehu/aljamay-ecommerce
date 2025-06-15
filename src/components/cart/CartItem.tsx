@@ -21,7 +21,7 @@ const CartItem = ({
 		mutate({ productId: id });
 	};
 	return (
-		<Card className="w-full border-[1px] border-cyan-200 flex gap-y-5 flex-col items-center justify-center md:flex-row md:justify-start md:gap-x-8">
+		<Card className="w-full border-[1px] border-gray-200 flex gap-y-5 flex-col items-center justify-center md:flex-row md:justify-start md:gap-x-8">
 			<Image
 				src={image}
 				alt={name}
@@ -38,7 +38,7 @@ const CartItem = ({
 					<p className="text-xl text-slate-400 line-through">
 						N{price + discount}
 					</p>
-					<h3 className=" bg-cyan-100 p-1 rounded-md text-cyan-500">
+					<h3 className=" bg-[#ADF802] p-1 rounded-md text-gray-600">
 						{getDiscountPercent(price, discount)}% off
 					</h3>
 				</div>
@@ -48,14 +48,14 @@ const CartItem = ({
 					<ProductQuantityField defaultQuantity={quantity} cartItemId={id} />
 					<div className="flex  gap-3  md:ml-auto">
 						<Link href="/products/checkout">
-							<Button className="bg-gradient-to-r from-green-800 text-center to-cyan-500 shadow-lg text-white font-semibold ">
+							<Button className="bg-[#ADF802] shadow-lg text-black font-semibold ">
 								Checkout
 							</Button>
 						</Link>
 						<Button
 							disabled={isPending}
 							onClick={handleRemoveFromCart}
-							className="bg-gradient-to-r border-2 border-cyan-500 text-center shadow-lg text-cyan-500 font-semibold"
+							className="bg-black text-center shadow-lg text-[#ADF802] font-semibold"
 						>
 							Remove
 						</Button>

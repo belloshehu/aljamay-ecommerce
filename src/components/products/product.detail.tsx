@@ -38,7 +38,7 @@ function ProductDetailSection({
 				<p className="text-xl text-slate-400 line-through">
 					N{product?.price + product?.discount}
 				</p>
-				<h3 className=" bg-cyan-100 p-1 rounded-md text-cyan-500">
+				<h3 className=" bg-[#ADF802] p-1 rounded-md text-gray-600">
 					{getDiscountPercent(product.price, product.discount)}% off
 				</h3>
 			</div>
@@ -52,7 +52,7 @@ function ProductDetailSection({
 				<Button
 					onClick={handleAddToCart}
 					size={"lg"}
-					className="bg-gradient-to-r from-green-800 to-cyan-500 shadow-lg text-white font-semibold  max-w-fit"
+					className="bg-[#ADF802] shadow-lg text-black font-semibold  max-w-fit"
 				>
 					<ShoppingCart />
 					Add to cart
