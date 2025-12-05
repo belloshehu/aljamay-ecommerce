@@ -13,8 +13,9 @@ export default function Navbar() {
 			{mainNavigationItems.map(({ label, path }) => (
 				<Link
 					key={path}
-					className={cn("hover:bg-white p-2 rounded-md", {
-						"bg-blue-100 rounded-sm py-2 px-5": isActivePath(path, pathname),
+					className={cn("hover:text-gray-600 text-black p-2 rounded-md", {
+						"bg-[#ADF802] border-[1px] border-white shadow-sm text-black rounded-sm py-2 px-5":
+							isActivePath(path, pathname),
 					})}
 					href={path}
 				>

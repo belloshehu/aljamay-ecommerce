@@ -1,39 +1,53 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingBag } from "lucide-react";
-
-import { toast } from "sonner";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ProductType } from "@/types/product.types";
+import { getDiscountPercent } from "@/lib/product.utils";
+import useRenderFeatures from "@/hooks/use-render-features";
+import ProductActionDialog from "./ProductActionDialog";
+import { useDeleteProduct } from "@/hooks/service-hooks/product.service.hooks";
+import { Badge } from "../ui/badge";
 
 interface ProductProps {
 	product: ProductType;
+	deleteHandler?: (id: string) => void;
 }
 
 export default function Product({ product }: ProductProps) {
-	const { data: session } = useSession();
-	const router = useRouter();
-	const { id, name, image, price, discount } = product;
+	const { isPending, mutate } = useDeleteProduct(product.id);
+	const pathname = usePathname();
+	const { enabledFeatures, disabledFeatures } = useRenderFeatures(
+		["deleteProduct", "editProduct"],
+		["orderProduct"],
+		pathname === "/dashboard/products"
+	);
 
-	const handleAddToShoppingCart = () => {
-		if (session) {
-			// dispatch(addCartItem(product));
-			toast.success(`Added ${product?.name} to shopping cart`);
-		} else {
-			router.push("/auth/login");
-		}
+	const router = useRouter();
+	const { id, name, image, price, discount, description, quantity } = product;
+
+	const handleAddToShoppingCart = () => {};
+
+	const handleProductClick = () => {
+		router.push(`/products/${id}`);
+	};
+	const deleteProduct = () => {
+		mutate({ productId: id });
+	};
+
+	const editProduct = () => {
+		console.log("edit product" + id);
 	};
 
 	return (
-		<article className="relative flex group flex-col gap-2 w-full shadow-xl max-h-[500px] bg-slate-100 hover:shadow-lg hover:scale-105 duration-200 transition-all">
+		<div className="relative flex group flex-col items-start gap-2 w-[200px]  hover:shadow-sm hover:scale-105 duration-200 transition-all">
 			<Image
 				src={image}
-				width={300}
+				width={200}
 				height={200}
 				alt={name}
-				className="shadow-lg rounded-t-md w-full h-[100%]"
+				className="rounded-t-md w-full object-cover cursor-pointer"
+				onClick={handleProductClick}
 			/>
 			{/* displays status of product whether it is available or not */}
 			<div
@@ -44,39 +58,54 @@ export default function Product({ product }: ProductProps) {
 				<small>{status}</small>
 			</div>
 
-			{/* discount badge */}
-			{discount && (
-				<div
-					className={`absolute top-2 left-2 min-w-fit p-2 w-10 h-10 rounded-full flex items-center justify-center bg-opacity-50 bg-green-200`}
-				>
-					<small>-{discount}%</small>
+			<div className=" flex flex-col w-full p-2">
+				<div className="flex items-center justify-start gap-2 p-1">
+					<p>
+						<small className="uppercase">{name} - </small>
+						{description.slice(0, 30)}...
+					</p>
 				</div>
-			)}
-
-			<div className="absolute bottom-0 z-20 flex flex-col w-full">
-				<div className="flex justify-between items-center gap-2 mb-1  absolute w-full bottom-0 group-hover:bottom-10">
-					<div className="flex items-center gap-2 bg-black  bg-opacity-80 p-1">
+				<div className="flex items-center justify-between gap-2 p-1 w-full">
+					<div className="flex items-center justify-between w-full gap-2">
 						<Link href={`/product/${id}`}>
-							<h4 className="text-primary">{name}</h4>
+							<h4 className="text-primary">
+								<span className="line-through">N</span>
+								{price}
+							</h4>
 						</Link>
-						<h4 className="text-slate-100">#{price}</h4>
+						<Badge className="bg-[#ADF802] text-black absolute top-1 right-1">
+							-{getDiscountPercent(price, discount)}%
+						</Badge>
 					</div>
-					<div
-						className="flex items-center justify-between gap-3 px-2 cursor-pointer bg-cyan-200 p-1"
+					{/* <div
+						className="flex items-center justify-between gap-3 px-2 cursor-pointer bg-[#B6EE56] p-1 rounded-2xl"
 						onClick={handleAddToShoppingCart}
 					>
-						<small className="">add to cart</small>
-						<ShoppingBag size={24} className="text-xl text-cyan-900" />
-					</div>
+						<small className="hidden md:flex">add to cart</small>
+						<ShoppingCart size={24} className="text-xl text-cyan-900" />
+					</div> */}
 				</div>
-
-				<Link
-					href={`order/${id}`}
-					className="scale-0 group-hover:scale-[100%] w-full p-2 px-7 text-center bg-gradient-to-r from-green-400 to-cyan-500 font-semibold text-white shadow-md duration-150 transition-transform"
-				>
-					Order now
-				</Link>
+				<Badge className="bg-black/50">{quantity} in stock</Badge>
 			</div>
-		</article>
+
+			{/* Show delete and edit button for admmin only */}
+			<div className="flex items-center justify-between p-2">
+				{enabledFeatures?.deleteProduct && (
+					<ProductActionDialog
+						actionType="delete"
+						actionHandler={deleteProduct}
+						product={product}
+						isPending={isPending}
+					/>
+				)}
+				{enabledFeatures?.editProduct && (
+					<ProductActionDialog
+						actionType="edit"
+						actionHandler={editProduct}
+						product={product}
+					/>
+				)}
+			</div>
+		</div>
 	);
 }

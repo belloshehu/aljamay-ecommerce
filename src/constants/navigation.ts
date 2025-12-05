@@ -6,11 +6,11 @@ export const mainNavigationItems = [
 		label: "Distributors",
 		isActive: false,
 	},
-	{
-		path: "/products",
-		label: "Products",
-		isActive: false,
-	},
+	// {
+	// 	path: "/products",
+	// 	label: "Products",
+	// 	isActive: false,
+	// },
 ];
 export const adminNavItems: NavigationItemType[] = [
 	{
@@ -28,20 +28,6 @@ export const adminNavItems: NavigationItemType[] = [
 		path: "/orders",
 		active: true,
 	},
-	{
-		label: "Settings",
-		path: "/studio/settings",
-		active: false,
-	},
-	{
-		label: "Messages",
-		path: "/studio/messages",
-		active: false,
-	},
-	{
-		label: "Notifications",
-		path: "/studio/notifications",
-	},
 ];
 
 export const userNavItems: NavigationItemType[] = [
@@ -53,21 +39,6 @@ export const userNavItems: NavigationItemType[] = [
 	{
 		label: "Orders",
 		path: "/orders",
-		active: true,
-	},
-	{
-		label: "Settings",
-		path: "/studio/settings",
-		active: false,
-	},
-	{
-		label: "Messages",
-		path: "/studio/messages",
-		active: false,
-	},
-	{
-		label: "Notifications",
-		path: "/studio/notifications",
 		active: true,
 	},
 ];

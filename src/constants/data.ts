@@ -1,4 +1,5 @@
 import { SelectDataType } from "@/types/data.types";
+import { IconType } from "../../public";
 
 export const carousel = [
 	{
@@ -73,19 +74,6 @@ export const productCategories: SelectDataType[] = [
 		label: "Spicies",
 		value: "spicies",
 	},
-	// , {
-	// 	label: "Cookies",
-	// 	value: "cookies",
-	// }, {
-	// 	label: "Pies",
-	// 	value: "pies",
-	// }, {
-	// 	label: "Cupcakes",
-	// 	value: "cupcakes",
-	// }, {
-	// 	label: "Donuts",
-	// 	value: "donuts",
-	// 	}
 ];
 
 export const productSortOptions: SelectDataType[] = [
@@ -108,5 +96,68 @@ export const productSortOptions: SelectDataType[] = [
 	{
 		label: "Oldest",
 		value: "oldest",
+	},
+];
+
+export const statesInNigeria: SelectDataType[] = [
+	{ label: "Abia", value: "Abia" },
+	{ label: "Adamawa", value: "Adamawa" },
+	{ label: "Akwa Ibom", value: "Akwa Ibom" },
+	{ label: "Anambra", value: "Anambra" },
+	{ label: "Bauchi", value: "Bauchi" },
+	{ label: "Bayelsa", value: "Bayelsa" },
+	{ label: "Benue", value: "Benue" },
+	{ label: "Borno", value: "Borno" },
+	{ label: "Cross River", value: "Cross River" },
+	{ label: "Delta", value: "Delta" },
+	{ label: "Ebonyi", value: "Ebonyi" },
+	{ label: "Edo", value: "Edo" },
+	{ label: "Ekiti", value: "Ekiti" },
+	{ label: "Enugu", value: "Enugu" },
+	{ label: "Gombe", value: "Gombe" },
+	{ label: "Imo", value: "Imo" },
+	{ label: "Jigawa", value: "Jigawa" },
+	{ label: "Kaduna", value: "Kaduna" },
+	{ label: "Kano", value: "Kano" },
+	{ label: "Katsina", value: "Katsina" },
+	{ label: "Kebbi", value: "Kebbi" },
+	{ label: "Kogi", value: "Kogi" },
+	{ label: "Kwara", value: "Kwara" },
+	{ label: "Lagos", value: "Lagos" },
+	{ label: "Nasarawa", value: "Nasarawa" },
+	{ label: "Niger", value: "Niger" },
+	{ label: "Ogun", value: "Ogun" },
+	{ label: "Ondo", value: "Ondo" },
+	{ label: "Osun", value: "Osun" },
+	{ label: "Oyo", value: "Oyo" },
+	{ label: "Plateau", value: "Plateau" },
+	{ label: "Rivers", value: "Rivers" },
+	{ label: "Sokoto", value: "Sokoto" },
+	{ label: "Taraba", value: "Taraba" },
+	{ label: "Yobe", value: "Yobe" },
+	{ label: "Zamfara", value: "Zamfara" },
+	{ label: "Abuja", value: "Abuja" },
+];
+
+export const productCategoriesWithImages: {
+	name: string;
+	icon: IconType;
+}[] = [
+	{
+		name: "All",
+		icon: "all-categories",
+	},
+	{
+		name: "Bread",
+		icon: "bread",
+	},
+	{
+		name: "Spices",
+		icon: "spice",
+	},
+
+	{
+		name: "Tea",
+		icon: "tea",
 	},
 ];

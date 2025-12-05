@@ -31,7 +31,6 @@ export default function SignupForm() {
 
 	const onSubmit = async (data: SignupValidationSchemaType) => {
 		// Handle signup logic here, e.g., call an API
-		console.log("Form submitted successfully:", data);
 		fetch(`/api/signup`, {
 			method: "POST",
 			headers: {
@@ -45,12 +44,10 @@ export default function SignupForm() {
 					toast.success("Successfully signed up");
 					router.push("/auth/login");
 				} else {
-					console.log(data);
 					toast.error(data.message || "Failed to sign up");
 				}
 			})
 			.catch((err) => {
-				console.error("Signup error:", err);
 				toast.error(err.response.data.message || "Failed to sign up");
 			});
 	};

@@ -6,8 +6,8 @@ import { ProductType } from "@/types/product.types";
 import { useEffect, useState } from "react";
 
 const getFeaturedProducts = async () => {
-	const products = await getProducts();
-	if (!products || products.length === 0) {
+	const products = (await getProducts()) as ProductType[] | null;
+	if (!products || products?.length === 0) {
 		return [];
 	}
 	return products;

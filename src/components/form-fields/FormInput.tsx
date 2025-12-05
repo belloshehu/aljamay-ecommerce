@@ -21,9 +21,10 @@ interface FormInputProps {
 	className?: string;
 	value?: string;
 	/* eslint-disable @typescript-eslint/no-explicit-any */
-	control: Control<any>;
+	control?: Control<any>;
 	step?: number;
 	name: string;
+	register?: any;
 }
 
 export default function FormInputField({
@@ -33,6 +34,7 @@ export default function FormInputField({
 	name,
 	type,
 	errorMessage,
+	register,
 	...props
 }: FormInputProps) {
 	return (

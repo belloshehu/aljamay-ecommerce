@@ -1,12 +1,22 @@
+import { ResponseType } from "@/types/response.types";
+
 export interface ProductType {
 	id: string;
 	name: string;
 	image: string;
-	thumbNails: string[];
+	thumbnails: string[];
 	description: string;
 	price: number;
-	stock: number;
+	quantity: number;
 	discount: number;
 	createdAt: Date;
 	updatedAt: Date;
+}
+
+export interface ProductResponseType extends ResponseType<ProductType[]> {
+	data: ProductType[];
+}
+
+export interface SingleProductResponseType extends ResponseType<ProductType> {
+	data: ProductType;
 }

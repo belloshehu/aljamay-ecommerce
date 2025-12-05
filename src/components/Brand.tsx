@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Righteous } from "next/font/google";
 import Link from "next/link";
+import { allura } from "@/app/fonts";
 
 const righteous = Righteous({ subsets: ["latin"], weight: ["400"] });
 export const Brand = ({
@@ -14,10 +15,13 @@ export const Brand = ({
 		<div className={cn("p-5", className)}>
 			<Link href={"/"} onClick={onClick}>
 				<h1
-					className={cn(`${righteous.className} font-bold text-xl lg:text-3xl`)}
+					className={cn(
+						`${righteous.className} font-bold text-xl lg:text-3xl text-[#ADF802]`
+					)}
 				>
 					Aljamay
 				</h1>
+				<p className={` ${allura.className} text-[#ADF802]`}>Made with love</p>
 			</Link>
 		</div>
 	);

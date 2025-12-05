@@ -18,7 +18,7 @@ export default function SearchInput({
 	return (
 		<div
 			className={cn(
-				"flex items-center justify-center rounded-full border border-cyan-500 hover:shadow-xl hover:shadow-slate-400 hover:drop-shadow-2xl bg-white",
+				"flex items-center justify-center rounded-full border border-[#ADF802] hover:shadow-xl hover:shadow-slate-400 hover:drop-shadow-2xl bg-white",
 				{ "w-full": isMobile },
 				className
 			)}
@@ -30,7 +30,7 @@ export default function SearchInput({
 			/>
 			<Button
 				variant={"ghost"}
-				className="outline-none bg-gradient-to-br from-green-800 to-cyan-500 rounded-full m-[1px] p-1 px-3"
+				className="outline-none bg-[#ADF802] rounded-full m-[1px] p-1 px-3"
 				size={"icon"}
 			>
 				<Search className="text-white" />

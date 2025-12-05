@@ -1,12 +1,13 @@
 import PageWrapper from "@/components/PageWrapper";
 import Product from "@/components/products/Product";
 import { getProducts } from "@/app/actions/product.action";
+import { ProductType } from "@/types/product.types";
 
 type Params = Promise<{ category: string }>;
 
 export default async function ProductPage(props: { params: Params }) {
 	const { category } = await props.params;
-	const products = await getProducts(20, 0, category);
+	const products = (await getProducts(20, 0, category)) as ProductType[] | null;
 
 	if (!products) {
 		return (

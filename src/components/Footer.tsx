@@ -17,8 +17,10 @@ export const Footer = () => {
 						<li>
 							<Link href={"/products/policies"}>Policies</Link>
 						</li>
-						<li className="flex items-center">
-							PTI staff Quarters, Effurun, Delta.
+						<li className="flex items-center capitalize whitespace-normal">
+							No. 4 Lere closed by Defence Avenue off NDA road, <br />
+							Kurmin Mashi, <br />
+							Kaduna Nigeria
 						</li>
 						<ul className="list-none my-3 flex justify-start items-center gap-5">
 							<li>
