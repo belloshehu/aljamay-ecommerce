@@ -26,11 +26,15 @@ import Image from "next/image";
 import DashboardNavigationDrawerItems from "@/components/dashboard/DashboardNavigationDrawerItem";
 import { mainNavigationItems } from "@/constants/navigation";
 
-export default function NavigationDrawer({ session }: { session: Session }) {
+export default function NavigationDrawer({
+	session,
+}: {
+	session: { user: UserType };
+}) {
 	const pathname = usePathname();
 	const [toggle, setToggle] = useState(false);
 	const [toggleDrawer, setToggleDrawer] = useState(false);
-	const { email, firstName, lastName, role } = session.user as UserType;
+	// const { email, firstName, lastName, role } = session?.user as UserType;
 
 	if (pathname === "/login" || pathname === "/signup") return null;
 
@@ -41,7 +45,7 @@ export default function NavigationDrawer({ session }: { session: Session }) {
 				<span className="sr-only">nav drawer</span>
 			</DrawerTrigger>
 			<DrawerContent>
-				<DrawerHeader className="shadow-sm py-1">
+				<DrawerHeader className="shadow-sm py-1 bg-black">
 					<DrawerTitle className="hidden">Nvigation</DrawerTitle>
 					<DrawerDescription className="hidden">
 						Navigation drawer
@@ -63,10 +67,13 @@ export default function NavigationDrawer({ session }: { session: Session }) {
 								<div className="flex flex-col">
 									<span className=" text-gray-900">
 										<small>
-											{firstName} {lastName}({role})
+											{session?.user?.firstName} {session?.user?.lastName}(
+											{session?.user?.role})
 										</small>
 									</span>
-									<span className="text-xs text-gray-500">{email}</span>
+									<span className="text-xs text-gray-500">
+										{session?.user?.email}
+									</span>
 								</div>
 								<Button
 									variant={"ghost"}
@@ -109,7 +116,7 @@ export default function NavigationDrawer({ session }: { session: Session }) {
 						</>
 					) : (
 						<DashboardNavigationDrawerItems
-							session={session}
+							session={session as Session}
 							toggleDrawer={setToggleDrawer}
 						/>
 					)}
@@ -130,12 +137,18 @@ export default function NavigationDrawer({ session }: { session: Session }) {
 					) : (
 						<div className="flex flex-col gap-3 w-full">
 							<Link href="/auth/login">
-								<Button variant={"default"} className="w-full">
+								<Button
+									variant={"default"}
+									className="w-full bg-[#ADF802] text-black"
+								>
 									Login
 								</Button>
 							</Link>
 							<Link href="/auth/signup">
-								<Button variant={"outline"} className="w-full">
+								<Button
+									variant={"outline"}
+									className="w-full bg-black text-[#ADF802]"
+								>
 									Signup
 								</Button>
 							</Link>

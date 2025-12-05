@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Righteous } from "next/font/google";
 import Link from "next/link";
-import getIcon from "../../public";
 import { allura } from "@/app/fonts";
 
 const righteous = Righteous({ subsets: ["latin"], weight: ["400"] });

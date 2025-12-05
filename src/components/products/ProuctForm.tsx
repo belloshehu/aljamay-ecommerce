@@ -83,7 +83,6 @@ export default function ProductForm({
 				image: secure_url,
 			});
 			toast.success("Product created successfully");
-			console.log("Product created successfully:", product);
 			reset();
 			closeDialog?.();
 		} catch (error) {

@@ -1,14 +1,12 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ProductType } from "@/types/product.types";
 import { getDiscountPercent } from "@/lib/product.utils";
 import useRenderFeatures from "@/hooks/use-render-features";
 import ProductActionDialog from "./ProductActionDialog";
 import { useDeleteProduct } from "@/hooks/service-hooks/product.service.hooks";
-import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
 
 interface ProductProps {
@@ -42,13 +40,13 @@ export default function Product({ product }: ProductProps) {
 	};
 
 	return (
-		<Card className="relative flex group flex-col gap-2 w-full shadow-none hover:shadow-lg hover:scale-105 duration-200 transition-all h-fit">
+		<div className="relative flex group flex-col items-start gap-2 w-[200px]  hover:shadow-sm hover:scale-105 duration-200 transition-all">
 			<Image
 				src={image}
-				width={300}
+				width={200}
 				height={200}
 				alt={name}
-				className=" rounded-t-md w-full h-[200px] aspect-square object-contain cursor-pointer"
+				className="rounded-t-md w-full object-cover cursor-pointer"
 				onClick={handleProductClick}
 			/>
 			{/* displays status of product whether it is available or not */}
@@ -60,54 +58,34 @@ export default function Product({ product }: ProductProps) {
 				<small>{status}</small>
 			</div>
 
-			{/* discount badge */}
-			{discount && (
-				<div
-					className={`absolute top-2 left-2 min-w-fit p-1 w-10 h-10 rounded-full flex items-center justify-center bg-opacity-50 bg-green-200`}
-				>
-					<small>-{getDiscountPercent(price, discount)}%</small>
-				</div>
-			)}
-
 			<div className=" flex flex-col w-full p-2">
 				<div className="flex items-center justify-start gap-2 p-1">
 					<p>
-						<span className="uppercase">{name} - </span>
+						<small className="uppercase">{name} - </small>
 						{description.slice(0, 30)}...
 					</p>
 				</div>
-				<div className="flex items-center justify-between gap-2   bg-opacity-80 p-1">
-					<div className="flex items-center justify-start gap-2">
+				<div className="flex items-center justify-between gap-2 p-1 w-full">
+					<div className="flex items-center justify-between w-full gap-2">
 						<Link href={`/product/${id}`}>
 							<h4 className="text-primary">
 								<span className="line-through">N</span>
 								{price}
 							</h4>
 						</Link>
-
-						<h6 className="line-through text-[#B6EE56]">
-							{getDiscountPercent(price, discount)} %
-						</h6>
+						<Badge className="bg-[#ADF802] text-black absolute top-1 right-1">
+							-{getDiscountPercent(price, discount)}%
+						</Badge>
 					</div>
-					<div
+					{/* <div
 						className="flex items-center justify-between gap-3 px-2 cursor-pointer bg-[#B6EE56] p-1 rounded-2xl"
 						onClick={handleAddToShoppingCart}
 					>
 						<small className="hidden md:flex">add to cart</small>
 						<ShoppingCart size={24} className="text-xl text-cyan-900" />
-					</div>
+					</div> */}
 				</div>
-				<Badge className="my-2">{quantity} in stock</Badge>
-
-				{/* Rended Order button if not disabled */}
-				{!disabledFeatures?.orderProduct && (
-					<Link
-						href={`order/${id}`}
-						className="scale-0 group-hover:scale-[98%] w-full p-2 px-7 text-center bg-[#ADF802] font-semibold text-black shadow-md duration-150 transition-transform"
-					>
-						Order now
-					</Link>
-				)}
+				<Badge className="bg-black/50">{quantity} in stock</Badge>
 			</div>
 
 			{/* Show delete and edit button for admmin only */}
@@ -128,6 +106,6 @@ export default function Product({ product }: ProductProps) {
 					/>
 				)}
 			</div>
-		</Card>
+		</div>
 	);
 }

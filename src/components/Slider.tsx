@@ -6,7 +6,7 @@ const AutoplaySlider = withAutoplay(AwesomeSlider);
 
 export default function Slider() {
 	return (
-		<div className="w-full shadow-2xl">
+		<div className="w-full shadow-2xl rounded-3xl">
 			<AutoplaySlider
 				play={true}
 				cancelOnInteraction={false} // should stop playing on user interaction
@@ -20,7 +20,7 @@ export default function Slider() {
 						source: "/images/spices.jpg",
 					},
 				]}
-				className="w-full h-[200px] md:h-[250px] aspect-square object-cover rounded-md shadow-lg"
+				className="w-full h-[100px] md:h-[200px] aspect-square object-cover rounded-3xl shadow-lg"
 			/>
 		</div>
 	);

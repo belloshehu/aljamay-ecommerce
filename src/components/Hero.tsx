@@ -1,24 +1,18 @@
-"use client";
 import "react-awesome-slider/dist/styles.css";
 import Slider from "@/components/Slider";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function Hero() {
-	const isMobile = useIsMobile();
 	return (
 		<section className="hero relative h-fit w-full flex flex-col-reverse md:flex-row gap-5 lg:gap-10 justify-around md:justify-center items-center p-5 md:px-36 md:py-10 bg-[url(/images/bakery1.jpg)] bg-no-repeat bg-blend-overlay bg-cover bg-left bg-fixed bg-black/60">
 			<div className="w-full md:w-3/5 flex flex-col items-center md:items-start gap-5 text-center md:text-left">
-				{!isMobile && (
-					<>
-						<h1 className="text-white font-extrabold text-3xl lg:text-7xl animate-pulse">
-							Products made <span className="text-[#ADF802]">for healthy</span>{" "}
-							refreshment
-						</h1>
-						<p className="text-slate-100">
-							Fresh bread, cakes, spices for your refreshment
-						</p>
-					</>
-				)}
+				<h1 className=" hidden md:block text-white font-extrabold text-3xl lg:text-7xl animate-pulse">
+					Products made <span className="text-[#ADF802]">for healthy</span>{" "}
+					refreshment
+				</h1>
+				{/* <p className="text-slate-100 hidden md:block">
+					Fresh bread, cakes, spices for your refreshment
+				</p> */}
+
 				{/* <div className="flex justify-center items-center gap-4">
 					<Link
 						href="/products/categories/bread"

@@ -55,7 +55,7 @@ export default function Header({ session }: { session: Session }) {
 						<Button
 							variant={"default"}
 							size={"lg"}
-							className="bg-[#ADF802] hover:from-cyan-700 hover:to-green-500"
+							className="bg-black hover:from-cyan-700 hover:to-green-500"
 						>
 							Login
 						</Button>
