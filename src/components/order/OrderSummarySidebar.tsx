@@ -79,7 +79,6 @@ export default function OrderSummarySidebar({
 			// Handle successful payment
 			toast.success("Payment successful!");
 			// Verify payment:
-			console.log(response);
 			const { success, data: verificationData } = await verifyPayment({
 				id: response.transaction_id as number,
 			});
