@@ -20,13 +20,13 @@ export default function ProductCategoryItem({
 					"text-black bg-[#ADF802] hover:text-gray-500": isActive,
 				}
 			)}
-			aria-label="category item"
+			aria-label="category-item"
 			onClick={(e) => {
 				e.stopPropagation();
 				clickHandler();
 			}}
 		>
-			<span>{getIcon(icon, "w-5 h-5 p-0")}</span>
+			{/* <span>{getIcon(icon, "w-5 h-5 p-0")}</span> */}
 			<small className=" p-0">{name}</small>
 		</button>
 	);

@@ -1,20 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { useGetCartItems } from "@/hooks/service-hooks/cart.service.hooks";
 import Loader from "@/components/Loader";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "../ui/input";
-import usePayment from "@/hooks/use-payment";
 import { makeFlutterwareConfig } from "@/config/flutterwave.config";
 import { Session } from "next-auth";
 import { useGetAllShippingAdressesByUser } from "@/hooks/service-hooks/shipping.service.hooks";
 import { useCreateOrder } from "@/hooks/service-hooks/order.service.hooks";
 import { toast } from "sonner";
-import { FlutterWaveResponse } from "flutterwave-react-v3/dist/types";
 import { useRouter } from "next/navigation";
+import FlutterwaveButton from "../FlutterwaveButton";
+import { FlutterwaveResponse } from "@/types/flutterwave";
+import { useVerifyPayment } from "@/hooks/service-hooks/flutterwave.service.hooks";
 
 export default function OrderSummarySidebar({
 	className,
@@ -25,10 +26,17 @@ export default function OrderSummarySidebar({
 }) {
 	const { data, isPending } = useGetCartItems();
 	const { mutateAsync, isPending: isCreatingOrder } = useCreateOrder();
-	const { useCustomFlutterwave } = usePayment();
 	const { isPending: isPendingShipping, data: shippingAddress } =
 		useGetAllShippingAdressesByUser();
+	const { mutateAsync: verifyPayment } = useVerifyPayment();
 	const router = useRouter();
+
+	useEffect(() => {
+		const script = document.createElement("script");
+		script.src = "https://checkout.flutterwave.com/v3.js";
+		script.async = true;
+		document.body.appendChild(script);
+	}, []);
 
 	const defaultAddress = shippingAddress?.find((address) => address.isDefault);
 
@@ -51,50 +59,49 @@ export default function OrderSummarySidebar({
 
 	const totalPrice = useMemo(calculateTotalPrice, [data]);
 	const totalDiscount = useMemo(calculateTotalDiscount, [data]);
-	const { closePaymentModal, handleFlutterPayment } = useCustomFlutterwave(
-		makeFlutterwareConfig({
-			amount: totalPrice,
-			currency: "NGN",
-			customer: {
-				email: session.user?.email!,
-				name: `${session?.user.firstName} ${session?.user.lastName}`,
-				phone_number: defaultAddress?.phoneNumber!,
-			},
-			customizations: {
-				title: "Order payment",
-				description: "Payment for order",
-			},
-		})
-	);
 
-	const handleCheckout = async () => {
-		handleFlutterPayment({
-			callback: (response: FlutterWaveResponse) => {
-				if (response.status === "successful") {
-					// Handle successful payment
-					toast.success("Payment successful!");
-					mutateAsync({
-						cartItems: data?.map((item) => item.id)!,
-						shippingAddressId: defaultAddress?.id!,
-						paymentMethod: "flutterwave",
-						totalAmount: totalPrice - totalDiscount + 0, // Assuming shipping cost is 0
-					})
-						.then(() => {
-							toast.success("Order created successfully!");
-							router.push("/dashboard/orders");
-						})
-						.catch((error) => {
-							console.log("Error creating order:", error);
-							toast.error("Error creating order: " + error.message);
-						});
-				} else {
-					// Handle failed payment
-					toast.error("Payment failed. Please try again.");
-				}
-				closePaymentModal();
-			},
-			onClose: closePaymentModal,
-		});
+	const config = makeFlutterwareConfig({
+		amount: totalPrice,
+		currency: "NGN",
+		customer: {
+			email: session.user?.email!,
+			name: `${session?.user.firstName} ${session?.user.lastName}`,
+			phone_number: defaultAddress?.phoneNumber!,
+		},
+		customizations: {
+			title: "Order payment",
+			description: "Payment for order",
+		},
+	});
+
+	const callback = async (response: FlutterwaveResponse) => {
+		if (response.status === "successful") {
+			// Handle successful payment
+			toast.success("Payment successful!");
+			// Verify payment:
+			const { success, data: verificationData } = await verifyPayment({
+				id: response.transaction_id as number,
+			});
+			if (!success) return;
+			console.log("Verified", verificationData);
+			mutateAsync({
+				cartItems: data?.map((item) => item.id)!,
+				shippingAddressId: defaultAddress?.id!,
+				paymentMethod: "flutterwave",
+				totalAmount: totalPrice - totalDiscount + 0, // Assuming shipping cost is 0
+			})
+				.then(() => {
+					toast.success("Order created successfully!");
+					router.push("/dashboard/orders");
+				})
+				.catch((error) => {
+					console.log("Error creating order:", error);
+					toast.error("Error creating order: " + error.message);
+				});
+		} else {
+			// Handle failed payment
+			toast.error("Payment failed. Please try again.");
+		}
 	};
 
 	if (isPending) {
@@ -124,6 +131,7 @@ export default function OrderSummarySidebar({
 					{totalPrice}
 				</h1>
 			</div>
+
 			<div className="w-full flex items-center justify-between gap-2">
 				<p>Total discount:</p>
 				<h1 className="font-medium text-xl">
@@ -131,6 +139,7 @@ export default function OrderSummarySidebar({
 					{totalDiscount}
 				</h1>
 			</div>
+
 			<Separator className="w-full" />
 			<div className="w-full flex justify-between items-center gap-2">
 				<p>Shipping:</p>
@@ -149,16 +158,24 @@ export default function OrderSummarySidebar({
 				</h1>
 			</div>
 
-			<Button
-				className="bg-[#ADF802] text-black w-full"
-				size={"lg"}
-				onClick={handleCheckout}
-				disabled={
-					isPendingShipping || isPending || !data?.length || !defaultAddress
+			<FlutterwaveButton
+				config={{
+					...config,
+					callback,
+					onclose: () => console.log("Payment modal closed"),
+				}}
+				children={
+					<Button
+						className="bg-[#ADF802] text-black w-full"
+						size={"lg"}
+						disabled={
+							isPendingShipping || isPending || !data?.length || !defaultAddress
+						}
+					>
+						Submit Order
+					</Button>
 				}
-			>
-				Submit Order
-			</Button>
+			/>
 		</aside>
 	);
 }

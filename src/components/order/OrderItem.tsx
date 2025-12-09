@@ -43,14 +43,6 @@ export default function OrderItem({
 				className="object-contain rounded-md"
 				loading="lazy"
 			/>
-			{/* <footer className="flex items-center justify-between w-full">
-				<h3>Delivered to:</h3>
-				<p className="text-sm text-slate-500">
-					{shippingAddress?.streetAddress},{shippingAddress?.city},
-					{shippingAddress?.state}
-					{shippingAddress?.country}
-				</p>
-			</footer> */}
 		</Card>
 	);
 }

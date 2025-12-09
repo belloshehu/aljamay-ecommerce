@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server";
 import { ResponseType } from "./response.types";
 
 export interface UserType {
@@ -9,6 +10,7 @@ export interface UserType {
 	id: string;
 	image?: string | null;
 	emailVerified: Date | null;
+	verificationCode?: string | null;
 }
 
 export interface UserAuthType {
@@ -19,6 +21,10 @@ export interface RefreshTokenType {
 	refreshToken: string;
 	expiresIn: number;
 	token: string;
+}
+
+export interface NextRequestWithUser extends NextRequest {
+	user: UserType;
 }
 
 export type LoginResponseType = ResponseType<UserAuthType & RefreshTokenType>;

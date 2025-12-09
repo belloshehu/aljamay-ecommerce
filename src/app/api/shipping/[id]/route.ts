@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../../../../auth";
 import { prisma } from "@/lib/prisma";
+import { StatusCodes } from "http-status-codes";
 
-export async function PATCH(
-	req: NextRequest,
-	{ params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest) {
 	try {
 		const session = await auth();
 		if (!session?.user) {
@@ -18,7 +16,15 @@ export async function PATCH(
 				}
 			);
 		}
-		const { id } = await params;
+		const id = req.nextUrl.searchParams.get("id");
+
+		if (!id) {
+			return NextResponse.json(
+				{ error: "Invalid shipping" },
+				{ status: StatusCodes.BAD_REQUEST }
+			);
+		}
+
 		const shippingAddressId = id;
 		const body = await req.json();
 		const {

@@ -3,13 +3,6 @@ import bcrypt from "bcryptjs";
 
 export async function GET(request: NextRequest) {
 	const { prisma } = await import("@/lib/prisma");
-
-	// if (!process.env.DATABASE_URL) {
-	// 	return NextResponse.json(
-	// 		{ message: "Database connection not configured" },
-	// 		{ status: 500 }
-	// 	);
-	// }
 	try {
 		const body = await request.json();
 		const { email, password } = body;

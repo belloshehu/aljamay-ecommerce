@@ -42,6 +42,8 @@ model User {
   phoneNumber   String?
   email         String   @unique
   emailVerified DateTime?
+  verificationDate DateTime? // date at which verification code is generated
+  verificationCode String?
   image         String?
   accounts      Account[]
   sessions      Session[]
