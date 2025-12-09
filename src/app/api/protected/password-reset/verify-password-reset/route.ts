@@ -1,3 +1,4 @@
+import { hasExpired } from "@/lib/auth";
 import { authMiddleware } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import { NextRequestWithUser } from "@/types/user.types";
@@ -33,19 +34,9 @@ export async function POST(request: NextRequestWithUser) {
 		}
 
 		// check whether the code has expired or not
-		const expiresIn = parseInt(process.env?.VERIFACTION_CODE_EXPIRATION!);
-		const isValid =
-			Date.now() - emailVerified.getTime() < expiresIn * 60 * 1000;
 
-		console.log(
-			"expires in:",
-			expiresIn,
-			"valid:",
-			isValid,
-			Date.now() - emailVerified.getTime()
-		);
-
-		if (!isValid) {
+		const hasPassed = hasExpired(emailVerified);
+		if (hasPassed) {
 			return NextResponse.json(
 				{ error: "Invalid verification code" },
 				{ status: StatusCodes.BAD_REQUEST }
