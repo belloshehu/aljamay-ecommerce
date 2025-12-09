@@ -3,14 +3,15 @@ import { authMiddleware } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import { NextRequestWithUser } from "@/types/user.types";
 import { StatusCodes } from "http-status-codes";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /*
    Verifies code send from client before password reset 
 
 */
-export async function POST(request: NextRequestWithUser) {
+export async function POST(req: NextRequest) {
 	try {
+		const request = req as NextRequestWithUser;
 		// run authmiddleware
 		await authMiddleware(request);
 

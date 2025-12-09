@@ -2,15 +2,16 @@ import { authMiddleware } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import { NextRequestWithUser } from "@/types/user.types";
 import { StatusCodes } from "http-status-codes";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /*
    Verifies code send from client for email verification
 
 */
-export async function POST(request: NextRequestWithUser) {
+export async function POST(req: NextRequest) {
 	try {
 		// run authmiddleware
+		const request = req as NextRequestWithUser;
 		await authMiddleware(request);
 
 		// get the verification from the client

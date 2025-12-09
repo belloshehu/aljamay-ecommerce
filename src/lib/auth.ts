@@ -8,5 +8,5 @@ export const hasExpired = (date: Date) => {
     */
 
 	const expiresIn = parseInt(process.env?.VERIFICATION_CODE_EXPIRATION!);
-	return Date.now() - date.getTime() < expiresIn * 60 * 1000;
+	return Date.now() - date.getTime() >= expiresIn * 60 * 1000;
 };

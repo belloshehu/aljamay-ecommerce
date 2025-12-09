@@ -1,10 +1,9 @@
 import { hasExpired } from "@/lib/auth";
 import { verifyJWT } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
-import { NextRequestWithUser } from "@/types/user.types";
 import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /*
    Verifies code send from client before password reset 
@@ -16,17 +15,14 @@ type BodyType = {
 	passwordRepeat: string;
 };
 
-export async function POST(
-	request: NextRequestWithUser,
-
-	{ params }: { params: Promise<{ token: string }> }
-) {
+export async function POST(request: NextRequest) {
 	try {
 		// get the new from the client
 		const body = (await request.json()) as BodyType;
 		const { password, passwordRepeat } = body;
-		const { token } = await params;
 
+		// get the token
+		const token = request.nextUrl.searchParams.get("token");
 		if (!token) {
 			return NextResponse.json(
 				{ error: "Invalid reset link" },
@@ -60,6 +56,14 @@ export async function POST(
 			);
 		}
 
+		// check if the new password is the same as the old
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (isMatch) {
+			return NextResponse.json(
+				{ error: "This password has been used before." },
+				{ status: StatusCodes.BAD_REQUEST }
+			);
+		}
 		// check if the link has expired
 		const _dateHasExpired = hasExpired(user?.verificationDate);
 
@@ -85,6 +89,7 @@ export async function POST(
 			{ status: StatusCodes.OK }
 		);
 	} catch (error: any) {
+		console.log(error);
 		return NextResponse.json(
 			{
 				error: "Password reset failed",

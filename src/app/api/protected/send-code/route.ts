@@ -4,16 +4,18 @@ import { prisma } from "@/lib/prisma";
 import { NextRequestWithUser } from "@/types/user.types";
 import { randomInt } from "crypto";
 import { StatusCodes } from "http-status-codes";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 const expiresIn = process.env.VERIFICATION_CODE_EXPIRATION!;
 
-export async function GET(req: NextRequestWithUser) {
+export async function GET(req: NextRequest) {
 	try {
 		// run authmiddeware
-		const request = (await authMiddleware(req)) as NextRequestWithUser;
+		const request = (await authMiddleware(
+			req as NextRequestWithUser
+		)) as NextRequestWithUser;
 		const user = request.user;
 		const code = randomInt(100000, 900000);
 

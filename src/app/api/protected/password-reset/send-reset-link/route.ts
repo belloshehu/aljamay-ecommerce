@@ -1,11 +1,9 @@
-import { EmailTemplate } from "@/components/email/email-template";
 import { PassResetEmailTemplate } from "@/components/email/password-reset-template";
-import { authMiddleware, signJWT } from "@/lib/jwt";
+import { signJWT } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
-import { NextRequestWithUser } from "@/types/user.types";
 
 import { StatusCodes } from "http-status-codes";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 /*
@@ -17,7 +15,7 @@ const expiresIn = process.env.VERIFICATION_CODE_EXPIRATION!;
 type BodyType = {
 	email: string;
 };
-export async function POST(req: NextRequestWithUser) {
+export async function POST(req: NextRequest) {
 	try {
 		const body = (await req.json()) as BodyType;
 		const { email } = body;
@@ -49,9 +47,8 @@ export async function POST(req: NextRequestWithUser) {
 		// create token
 		const token = await signJWT({ email, id: user.id });
 		// construct a magic link
-		const magicLink = "https://aljamay.com/reset-redirect?token=" + token;
+		const magicLink = "https://aljamay.com/auth/reset-redirect?token=" + token;
 		// Send email with the magic link
-		console.log("Sending reset link:", magicLink, expiresIn);
 		const { error } = await resend.emails.send({
 			from: "Acme <onboarding@resend.dev>",
 			to: [user.email],
