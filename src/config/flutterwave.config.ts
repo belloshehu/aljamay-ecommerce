@@ -2,7 +2,7 @@ export interface FlutterwaveConfigType {
 	public_key: string;
 	tx_ref: string;
 	amount: number;
-	currency: string;
+	currency: "NGN" | "USD";
 	payment_options: string;
 	customer: {
 		email: string;
@@ -18,7 +18,7 @@ export interface FlutterwaveConfigType {
 
 export interface FlutterwaveCustomConfigType {
 	amount: number;
-	currency: string;
+	currency: "NGN" | "USD";
 	customer: {
 		email: string;
 		phone_number: string;

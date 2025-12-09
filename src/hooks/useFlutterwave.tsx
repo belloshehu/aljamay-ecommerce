@@ -1,27 +1,25 @@
 "use client";
 
 import { useEffect } from "react";
+import type { FlutterwaveCheckoutConfig } from "@/types/flutterwave";
 
-export function useFlutterwaveInline() {
+export function useFlutterwave() {
 	useEffect(() => {
 		// Load Flutterwave script once
-		const script = document.createElement("script");
-		script.src = "https://checkout.flutterwave.com/v3.js";
-		script.async = true;
-		document.body.appendChild(script);
+		if (!window.FlutterwaveCheckout) {
+			const script = document.createElement("script");
+			script.src = "https://checkout.flutterwave.com/v3.js";
+			script.async = true;
+			document.body.appendChild(script);
+		}
 	}, []);
 
-	const payWithFlutterwave = (config: any) => {
-		// @ts-ignore global from script
-		FlutterwaveCheckout({
-			...config,
-			callback: (response: any) => {
-				config.callback?.(response);
-			},
-			onclose: () => {
-				config.onclose?.();
-			},
-		});
+	const payWithFlutterwave = (config: FlutterwaveCheckoutConfig) => {
+		if (!window.FlutterwaveCheckout) {
+			console.error("Flutterwave script not loaded yet");
+			return;
+		}
+		window.FlutterwaveCheckout(config);
 	};
 
 	return { payWithFlutterwave };

@@ -21,8 +21,9 @@ export default async function UsersPage() {
 		<div className="w-full">
 			{/* <h1 className="text-2xl font-bold mb-4">Users ({users.length})</h1> */}
 			{/* Add more dashboard content here */}
-			<section className="w-full">
-				<ul className="w-full">
+			<section className="w-full cursor-pointer">
+				<h1 className="text-2xl mb-5">Users ({users.length})</h1>
+				<ul className="w-full flex flex-col gap-5">
 					{users.map((user: UserType) => (
 						<User user={user} key={user.id} />
 					))}

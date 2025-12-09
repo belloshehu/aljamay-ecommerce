@@ -6,7 +6,6 @@ export const useCreateOrder = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: OrderServiceAPI.createOrder,
-
 		onSuccess: () => {
 			toast.success("Order created successfully:");
 			queryClient.invalidateQueries({ queryKey: ["orders"] });
