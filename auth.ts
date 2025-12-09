@@ -31,6 +31,7 @@ export const {
 			},
 		},
 	},
+	jwt: {},
 	adapter: PrismaAdapter(prisma),
 	providers: [
 		CredentialsProvider({
@@ -49,10 +50,12 @@ export const {
 					const user = await prisma.user.findUnique({
 						where: { email },
 					});
+
 					if (!user) {
 						throw new AuthError("Invalid email or password");
 					}
 					const isMatch = await bcrypt.compare(password, user.password);
+
 					if (isMatch) {
 						return user;
 					}
@@ -62,7 +65,7 @@ export const {
 		}),
 	],
 	callbacks: {
-		async session({ session }) {
+		async session({ session, token }) {
 			const user: UserType | null = await prisma.user.findUnique({
 				where: { email: session.user?.email || "" },
 			});
@@ -71,7 +74,13 @@ export const {
 			}
 			session.userId = user.id;
 			session.user = user as UserType;
+
 			return session;
+		},
+		async jwt({ token, user, profile }) {
+			if (user) token.id = user.id;
+			console.log(token);
+			return token;
 		},
 		authorized({ auth, request: { nextUrl } }) {
 			console.log("Auth callback triggered", auth, nextUrl);
