@@ -1,24 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
+import { StatusCodes } from "http-status-codes";
+import { getUserFromSessionOrJWT } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session?.user) {
+		const user = await getUserFromSessionOrJWT(req);
+		if (!user) {
 			return NextResponse.json(
 				{
-					message: "You must be logged in to access this resource",
+					message: "Unauthorized. Please login",
 				},
 				{
-					status: 401,
+					status: StatusCodes.UNAUTHORIZED,
 				}
 			);
 		}
-
 		const cartItems = await prisma.cartItem.findMany({
 			where: {
-				userId: session.user.id, // Assuming you have a userId field in your cart item model
+				userId: user.id, // Assuming you have a userId field in your cart item model
 			},
 			include: {
 				product: true, // Include product details
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 		});
 		return NextResponse.json(
 			{
-				message: "Cart items retrieved successfully",
+				message: "Cart items retrieved",
 				data: cartItems,
 			},
 			{
@@ -55,15 +55,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const session = await auth();
-
-		if (!session?.user) {
+		const user = await getUserFromSessionOrJWT(req);
+		if (!user) {
 			return NextResponse.json(
 				{
-					message: "You must be logged in to access this resource",
+					message: "Unauthorized. Please login",
 				},
 				{
-					status: 401,
+					status: StatusCodes.UNAUTHORIZED,
 				}
 			);
 		}
@@ -95,7 +94,7 @@ export async function POST(req: NextRequest) {
 		const existingCartItem = await prisma.cartItem.findFirst({
 			where: {
 				productId,
-				userId: session.user.id, // Assuming you have a userId field in your cart item model
+				userId: user.id, // Assuming you have a userId field in your cart item model
 			},
 		});
 		if (existingCartItem) {
@@ -122,7 +121,7 @@ export async function POST(req: NextRequest) {
 			data: {
 				productId,
 				quantity,
-				userId: session.user.id, // Assuming you have a userId field in your cart item model
+				userId: user.id, // Assuming you have a userId field in your cart item model
 			},
 		});
 		return NextResponse.json(

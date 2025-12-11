@@ -2,20 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../../../auth";
 import { ShippingValidationSchemaType } from "@/schemas/shipping.validation.schemas";
 import { prisma } from "@/lib/prisma";
+import { getUserFromSessionOrJWT } from "@/lib/auth";
+import { UserType } from "@/types/user.types";
+import { StatusCodes } from "http-status-codes";
 
 export async function POST(req: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session?.user) {
-			return NextResponse.json(
-				{
-					error: "Unauthorized. Please log in.",
-				},
-				{
-					status: 401,
-				}
-			);
-		}
+		const user = (await getUserFromSessionOrJWT(req)) as UserType;
+
 		const body = await req.json();
 		const {
 			firstName,
@@ -44,7 +38,7 @@ export async function POST(req: NextRequest) {
 					error: "All fields are required.",
 				},
 				{
-					status: 400,
+					status: StatusCodes.BAD_REQUEST,
 				}
 			);
 		}
@@ -56,7 +50,7 @@ export async function POST(req: NextRequest) {
 			// to set isDefault to false for all other addresses
 			await prisma.shippingAddress.updateMany({
 				where: {
-					userId: session.user.id,
+					userId: user.id,
 				},
 				data: {
 					isDefault: false,
@@ -68,7 +62,7 @@ export async function POST(req: NextRequest) {
 		const newShippingAddress = await prisma.shippingAddress.create({
 			data: {
 				...body,
-				userId: session.user.id, // Assuming you have a userId field in your ShippingAddressType
+				userId: user.id, // Assuming you have a userId field in your ShippingAddressType
 			},
 		});
 		return NextResponse.json(
@@ -77,17 +71,17 @@ export async function POST(req: NextRequest) {
 				data: newShippingAddress,
 			},
 			{
-				status: 201,
+				status: StatusCodes.CREATED,
 			}
 		);
 	} catch (error) {
 		console.error("Error creating shipping address:", error);
 		return NextResponse.json(
 			{
-				error: "An error occurred while processing your request.",
+				error: "Unknown error",
 			},
 			{
-				status: 500,
+				status: StatusCodes.INTERNAL_SERVER_ERROR,
 			}
 		);
 	}
@@ -95,21 +89,11 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session?.user) {
-			return NextResponse.json(
-				{
-					error: "Unauthorized. Please log in.",
-				},
-				{
-					status: 401,
-				}
-			);
-		}
+		const user = (await getUserFromSessionOrJWT(req)) as UserType;
 
 		const shippingAddresses = await prisma.shippingAddress.findMany({
 			where: {
-				userId: session.user.id,
+				userId: user.id,
 			},
 			orderBy: {
 				isDefault: "desc", // Ensure default address comes first
@@ -121,7 +105,7 @@ export async function GET(req: NextRequest) {
 				data: shippingAddresses,
 			},
 			{
-				status: 200,
+				status: StatusCodes.CREATED,
 			}
 		);
 	} catch (error) {
@@ -130,7 +114,7 @@ export async function GET(req: NextRequest) {
 				error: "An error occurred while fetching shipping addresses.",
 			},
 			{
-				status: 500,
+				status: StatusCodes.INTERNAL_SERVER_ERROR,
 			}
 		);
 	}

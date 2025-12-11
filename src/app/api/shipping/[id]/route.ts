@@ -1,21 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { StatusCodes } from "http-status-codes";
+import { getUserFromSessionOrJWT } from "@/lib/auth";
 
 export async function PATCH(req: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session?.user) {
-			return NextResponse.json(
-				{
-					error: "Unauthorized. Please log in.",
-				},
-				{
-					status: 401,
-				}
-			);
-		}
+		await getUserFromSessionOrJWT(req);
 		const id = req.nextUrl.searchParams.get("id");
 
 		if (!id) {
@@ -56,7 +46,7 @@ export async function PATCH(req: NextRequest) {
 					error: "All fields are required.",
 				},
 				{
-					status: 400,
+					status: StatusCodes.BAD_REQUEST,
 				}
 			);
 		}
@@ -84,17 +74,16 @@ export async function PATCH(req: NextRequest) {
 				data: updatedAddress,
 			},
 			{
-				status: 200,
+				status: StatusCodes.OK,
 			}
 		);
 	} catch (error) {
-		console.error("Error updating shipping address:", error);
 		return NextResponse.json(
 			{
-				error: "An error occurred while updating the shipping address.",
+				error: "Unknown Error",
 			},
 			{
-				status: 500,
+				status: StatusCodes.INTERNAL_SERVER_ERROR,
 			}
 		);
 	}
