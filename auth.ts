@@ -77,13 +77,11 @@ export const {
 
 			return session;
 		},
-		async jwt({ token, user, profile }) {
+		async jwt({ token, user }) {
 			if (user) token.id = user.id;
-			console.log(token);
 			return token;
 		},
 		authorized({ auth, request: { nextUrl } }) {
-			console.log("Auth callback triggered", auth, nextUrl);
 			const isLoggedIn = !!auth?.user;
 			const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
 			if (isOnDashboard) {

@@ -5,24 +5,33 @@ import { getUserFromSessionOrJWT } from "@/lib/auth";
 import { StatusCodes } from "http-status-codes";
 
 /*
-	Fetch product by Id: 
+    Fetch order by Id: 
 */
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
+		await getUserFromSessionOrJWT(req); // this authenticate user
 		const { id } = await params;
-		const product = await prisma.product.findUnique({
+		const product = await prisma.order.findUnique({
 			where: {
 				id,
+			},
+			include: {
+				orderItems: {
+					include: {
+						product: true, // Include product details in the order items
+					},
+				},
+				shippingAddress: true,
 			},
 		});
 
 		if (!product) {
 			return NextResponse.json(
 				{
-					error: "Product not found",
+					error: "Order not found",
 				},
 				{
 					status: StatusCodes.BAD_REQUEST,
@@ -32,7 +41,7 @@ export async function GET(
 
 		return NextResponse.json(
 			{
-				message: "Product found",
+				message: "Order found",
 				data: product,
 			},
 			{
@@ -42,7 +51,7 @@ export async function GET(
 	} catch (error) {
 		return NextResponse.json(
 			{
-				message: "Failed to fetch product",
+				message: "Failed to fetch order",
 				error: error instanceof Error ? error.message : "Unknown error",
 			},
 			{
@@ -52,6 +61,7 @@ export async function GET(
 	}
 }
 
+// Cancel Order
 export async function DELETE(
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> }

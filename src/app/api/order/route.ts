@@ -1,23 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
+import { getUserFromSessionOrJWT } from "@/lib/auth";
+import { UserType } from "@/types/user.types";
+import { Resend } from "resend";
+import { OrderEmailTemplate } from "@/components/email/order.email.template";
+import { OrderType } from "@/types/order.types";
 
 // Post request handler for order creation
+const resend = new Resend(process.env.RESEND_API_KEY!);
+
 export async function POST(request: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session || !session.user) {
-			// If the user is not authenticated, redirect to the login page
-			return NextResponse.json(
-				{
-					error: "Unauthorized. Please log in.",
-				},
-				{
-					status: 401,
-				}
-			);
-		}
+		const user = (await getUserFromSessionOrJWT(request)) as UserType;
 
 		const body = await request.json();
 		const {
@@ -26,7 +20,6 @@ export async function POST(request: NextRequest) {
 			paymentMethod,
 			totalAmount,
 		} = body;
-		console.log("Creating order with data:", body, shippingAddressId);
 		if (!cartItemIds || !shippingAddressId || !paymentMethod || !totalAmount) {
 			return NextResponse.json(
 				{
@@ -41,7 +34,7 @@ export async function POST(request: NextRequest) {
 				id: {
 					in: cartItemIds,
 				},
-				userId: session.user.id, // Ensure the cart items belong to the authenticated user
+				userId: user.id, // Ensure the cart items belong to the authenticated user
 			},
 			include: {
 				product: true, // Include product details if needed
@@ -50,7 +43,7 @@ export async function POST(request: NextRequest) {
 
 		const order = await prisma.order.create({
 			data: {
-				userId: session.user.id,
+				userId: user.id,
 				shippingAddressId,
 				paymentMethod,
 				totalAmount,
@@ -95,9 +88,10 @@ export async function POST(request: NextRequest) {
 				id: {
 					in: cartItemIds,
 				},
-				userId: session.user.id, // Ensure the cart items belong to the authenticated user
+				userId: user.id, // Ensure the cart items belong to the authenticated user
 			},
 		});
+
 		// Return the created order with its items
 		const createdOrder = await prisma.order.findUnique({
 			where: {
@@ -111,6 +105,23 @@ export async function POST(request: NextRequest) {
 				},
 			},
 		});
+
+		if (createdOrder) {
+			// Send confirmation email:
+			const magicLink =
+				"https://aljamay.com/orders/order-redirect/" + createdOrder.id;
+			// Send email with the magic link
+			const { error } = await resend.emails.send({
+				from: "Acme <onboarding@resend.dev>",
+				to: [user.email],
+				subject: "Order Confirmation",
+				react: OrderEmailTemplate({
+					order: createdOrder,
+					user,
+					orderLink: magicLink,
+				}),
+			});
+		}
 
 		// update the product stock
 		await Promise.all(
@@ -148,14 +159,10 @@ export async function POST(request: NextRequest) {
 // Get request handler for fetching orders
 export async function GET(request: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session || !session.user) {
-			return redirect("/auth/login");
-		}
-
+		const user = (await getUserFromSessionOrJWT(request)) as UserType;
 		const orders = await prisma.order.findMany({
 			where: {
-				userId: session.user.id, // Fetch orders for the authenticated user
+				userId: user.id, // Fetch orders for the authenticated user
 			},
 			include: {
 				orderItems: {
@@ -174,7 +181,6 @@ export async function GET(request: NextRequest) {
 			{ status: 200 }
 		);
 	} catch (error) {
-		console.error("Error fetching orders:", error);
 		return NextResponse.json(
 			{
 				message: "An error occurred while fetching orders",

@@ -10,7 +10,6 @@ interface OrderItemProps extends OrderItemType {
 	className?: string;
 	status?: OrderStatus;
 	shippingAddress?: ShippingAddressType;
-	orderNumber?: string;
 }
 export default function OrderItem({
 	className,
@@ -24,7 +23,7 @@ export default function OrderItem({
 	return (
 		<Card className={cn("w-full p-5 flex flex-col gap-3", className)}>
 			<header className="flex items-center justify-between w-full">
-				<h3 className="font-medium">{formatDate(createdAt.toString())}</h3>
+				<h3 className="font-medium">{formatDate(createdAt?.toString()!)}</h3>
 				<h3 className="font-medium text-cyan-500">{status}</h3>
 			</header>
 			<Separator className="w-full" />

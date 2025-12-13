@@ -15,14 +15,13 @@ export interface OrderType {
 	userId: string;
 	orderItems: OrderItemType[];
 	shippingAddressId: string;
-	paymentMethod: string;
+	paymentMethod: string | null;
 	totalAmount: number;
 	status: OrderStatus;
 	paymentStatus: PaymentStatus;
-	orderNumber: string;
 	shippingCost?: number;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 export interface OrderItemType {
@@ -31,8 +30,9 @@ export interface OrderItemType {
 	product: ProductType;
 	quantity: number;
 	price: number; // Price at the time of order
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt?: Date;
+	updatedAt?: Date;
+	orderNumber: string;
 }
 
 export interface OrderResponseType extends ResponseType<OrderType[]> {

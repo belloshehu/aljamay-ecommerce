@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "../../../../auth";
-import { redirect } from "next/navigation";
+import { getUserFromSessionOrJWT } from "@/lib/auth";
+import { UserType } from "@/types/user.types";
 
 export async function POST(request: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session?.user) {
-			redirect("/auth/login");
-		}
+		const user = (await getUserFromSessionOrJWT(request)) as UserType;
 
-		if (session.user.role !== "ADMIN") {
+		if (user.role !== "ADMIN") {
 			return NextResponse.json(
 				{ message: "You do not have permission to create a product" },
 				{ status: 403 }
@@ -19,7 +16,7 @@ export async function POST(request: NextRequest) {
 
 		const body = await request.json();
 		const product = await prisma.product.create({
-			data: { userId: session.user.id, ...body },
+			data: { userId: user.id, ...body },
 		});
 		return NextResponse.json({ data: product }, { status: 200 });
 	} catch (error: any) {
@@ -39,11 +36,10 @@ export async function GET(request: NextRequest) {
 			},
 		});
 		return NextResponse.json(
-			{ data: products, message: "Products fetched successfully" },
+			{ data: products, message: "Products fetched" },
 			{ status: 200 }
 		);
 	} catch (error) {
-		console.error("Error fetching products:", error);
 		return NextResponse.json(
 			{
 				message: "Failed to fetch products",

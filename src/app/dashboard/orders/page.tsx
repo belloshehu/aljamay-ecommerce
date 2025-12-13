@@ -6,7 +6,6 @@ import OrderListHeader from "@/components/order/OrderListHeader";
 
 export default function OrdersPage() {
 	const { isPending, data } = useGetOrders();
-	console.log("Orders data:", data);
 
 	if (isPending) {
 		return (
@@ -37,7 +36,7 @@ export default function OrdersPage() {
 				<>
 					<OrderListHeader
 						status={item.status}
-						createdAt={item?.createdAt.toString()}
+						createdAt={item?.createdAt?.toString()!}
 						OrderItemsCount={item.orderItems.length}
 						totalAmount={item.totalAmount}
 						key={item.id}

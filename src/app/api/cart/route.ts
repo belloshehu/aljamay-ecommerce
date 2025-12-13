@@ -2,20 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { StatusCodes } from "http-status-codes";
 import { getUserFromSessionOrJWT } from "@/lib/auth";
+import { UserType } from "@/types/user.types";
 
 export async function GET(req: NextRequest) {
 	try {
-		const user = await getUserFromSessionOrJWT(req);
-		if (!user) {
-			return NextResponse.json(
-				{
-					message: "Unauthorized. Please login",
-				},
-				{
-					status: StatusCodes.UNAUTHORIZED,
-				}
-			);
-		}
+		const user = (await getUserFromSessionOrJWT(req)) as UserType;
 		const cartItems = await prisma.cartItem.findMany({
 			where: {
 				userId: user.id, // Assuming you have a userId field in your cart item model
@@ -55,19 +46,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const user = await getUserFromSessionOrJWT(req);
-		if (!user) {
-			return NextResponse.json(
-				{
-					message: "Unauthorized. Please login",
-				},
-				{
-					status: StatusCodes.UNAUTHORIZED,
-				}
-			);
-		}
-
-		console.log("Adding item to cart");
+		const user = (await getUserFromSessionOrJWT(req)) as UserType;
 		const { productId, quantity } = await req.json();
 		if (!productId || !quantity) {
 			return NextResponse.json(
@@ -108,7 +87,7 @@ export async function POST(req: NextRequest) {
 			});
 			return NextResponse.json(
 				{
-					message: "Item quantity updated in cart successfully",
+					message: "Item quantity updated in cart",
 					data: updatedCartItem,
 				},
 				{
@@ -126,7 +105,7 @@ export async function POST(req: NextRequest) {
 		});
 		return NextResponse.json(
 			{
-				message: "Item added to cart successfully",
+				message: "Item added to cart.",
 				data: cartItem,
 			},
 			{

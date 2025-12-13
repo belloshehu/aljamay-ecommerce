@@ -83,7 +83,6 @@ export default function OrderSummarySidebar({
 				id: response.transaction_id as number,
 			});
 			if (!success) return;
-			console.log("Verified", verificationData);
 			mutateAsync({
 				cartItems: data?.map((item) => item.id)!,
 				shippingAddressId: defaultAddress?.id!,

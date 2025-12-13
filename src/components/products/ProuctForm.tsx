@@ -143,7 +143,7 @@ export default function ProductForm({
 					control={control}
 					name="image"
 					label="Product Image"
-					maxImageSize={1000000}
+					maxImageSize={5000000}
 					className="w-full h-[100px] justify-start items-start"
 					previewHeight={300}
 					previewWidth={250}
