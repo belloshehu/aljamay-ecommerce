@@ -29,7 +29,7 @@ export default function ShippingAddress({
 	return (
 		<Card
 			className={cn(
-				"w-full flex flex-col gap-1 p-5 bg-white rounded-md border-[1px]",
+				"w-full flex flex-col gap-1 p-5 bg-white rounded-md border-[1px] my-2",
 				className
 			)}
 		>

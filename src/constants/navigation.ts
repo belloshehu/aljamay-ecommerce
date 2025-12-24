@@ -1,11 +1,11 @@
 import { NavigationItemType } from "@/types/navigation.types";
 
 export const mainNavigationItems = [
-	{
-		path: "/distributors",
-		label: "Distributors",
-		isActive: false,
-	},
+	// {
+	// 	path: "/distributors",
+	// 	label: "Distributors",
+	// 	isActive: false,
+	// },
 	// {
 	// 	path: "/products",
 	// 	label: "Products",

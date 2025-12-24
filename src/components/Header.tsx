@@ -1,6 +1,5 @@
 "use client";
 import Navbar from "./Navbar";
-import { Righteous } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import CartNavItem from "./cart/CartNavItem";
@@ -10,8 +9,7 @@ import NavigationDrawer from "./NavigationDrawer";
 import ProfileDropdownMenu from "./ProfileDropdownMenu";
 import { Session } from "next-auth";
 import Image from "next/image";
-
-const righteous = Righteous({ subsets: ["latin"], weight: ["400"] });
+import ProductCategoryHeader from "./products/ProductFilterHearder";
 
 export default function Header({ session }: { session: Session }) {
 	const pathname = usePathname();
@@ -23,7 +21,7 @@ export default function Header({ session }: { session: Session }) {
 	}
 
 	return (
-		<header className=" bg-[#ADF802] flex flex-row items-center w-full justify-between text-white  px-3 py-2  lg:px-16">
+		<header className=" border-b-2 border-t-[0px] flex flex-row items-center w-full justify-between text-white  px-3 py-2  lg:px-16">
 			<div className="brand">
 				<Link href={"/"}>
 					{/* <h1
@@ -34,12 +32,13 @@ export default function Header({ session }: { session: Session }) {
 					<Image
 						src={"/logo.png"}
 						alt="logo"
-						height={50}
+						height={60}
 						width={100}
 						className="object-cover"
 					/>
 				</Link>
 			</div>
+			{!isMobile && <ProductCategoryHeader />}
 			<Navbar />
 			<div className="block lg:hidden">
 				<CartNavItem

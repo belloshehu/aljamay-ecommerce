@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { UserType } from "@/types/user.types";
-import { getUserFromSessionOrJWT } from "@/lib/auth";
+import { getUserFromSessionOrJWT, withAuth } from "@/lib/auth";
 import { StatusCodes } from "http-status-codes";
 
 /*
@@ -16,6 +16,18 @@ export async function GET(
 		const product = await prisma.product.findUnique({
 			where: {
 				id,
+			},
+			include: {
+				reviews: {
+					include: {
+						user: true,
+					},
+				},
+				orderItems: {
+					include: {
+						product: true,
+					},
+				},
 			},
 		});
 
@@ -88,3 +100,35 @@ export async function DELETE(
 		);
 	}
 }
+
+// Update product by Id
+export const PATCH = withAuth(async (request: NextRequest, user, context) => {
+	try {
+		if (user.role !== "ADMIN") {
+			return NextResponse.json(
+				{ message: "Permission required" },
+				{ status: StatusCodes.FORBIDDEN }
+			);
+		}
+		const { id } = await context!;
+		const body = await request.json();
+
+		const updatedProduct = await prisma.product.update({
+			where: { id },
+			data: body,
+		});
+
+		return NextResponse.json(
+			{
+				message: "Product updated successfully",
+				data: updatedProduct,
+			},
+			{ status: 200 }
+		);
+	} catch (error: any) {
+		return NextResponse.json(
+			{ message: "Failed to update product", error: error.message },
+			{ status: 500 }
+		);
+	}
+});

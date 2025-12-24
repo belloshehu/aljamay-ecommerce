@@ -96,6 +96,8 @@ model Product {
   reviews       Review[]
   rating        Float?   @default(0) // Average rating
   ratingCount   Int?      @default(0) // Number of ratings
+categoryGroup  ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId    String?   @db.ObjectId
 }
 
 model CartItem {
@@ -169,4 +171,15 @@ model Order{
   trackingUrl   String? // URL for tracking the shipment
   orderItemIds String[] @db.ObjectId
   orderItems OrderItem[]
+}
+
+model ProductCategory {
+  id            String    @id   @default(auto())  @map("_id")  @db.ObjectId
+  name          String    @unique
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  products      Product[]
+  image         String?
+  productIds     String[] @db.ObjectId
 }

@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Body, Heading, Head, Link, Img } from "@react-email/components";
+import {
+	Body,
+	Heading,
+	Head,
+	Link,
+	Img,
+	Section,
+} from "@react-email/components";
 import { UserType } from "@/types/user.types";
 import { OrderType } from "@/types/order.types";
 //@ts-ignore
@@ -40,9 +47,9 @@ export function OrderEmailTemplate({
 				>
 					<h5>Products:</h5>
 					{order.orderItems.map((item) => (
-						<div
+						<Section
 							key={item.product.id}
-							style={{ borderWidth: 1, borderRadius: 20, padding: 10 }}
+							style={{ borderWidth: 1, borderRadius: 20, padding: 10, gap: 20 }}
 						>
 							<Img
 								src={item.product.image}
@@ -58,7 +65,7 @@ export function OrderEmailTemplate({
 								</p>
 								)
 							</div>
-						</div>
+						</Section>
 					))}
 				</ul>
 				<h6>

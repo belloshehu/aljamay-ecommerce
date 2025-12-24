@@ -1,17 +1,8 @@
 import { NextRequest } from "next/server";
 import { ResponseType } from "./response.types";
+import { User } from "@prisma/client";
 
-export interface UserType {
-	email: string;
-	firstName: string;
-	lastName: string;
-	varified?: boolean;
-	role: UserRole;
-	id: string;
-	image?: string | null;
-	emailVerified: Date | null;
-	verificationCode?: string | null;
-}
+export interface UserType extends User {}
 
 export interface UserAuthType {
 	user: UserType;

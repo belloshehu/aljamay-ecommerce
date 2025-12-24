@@ -45,3 +45,42 @@ export const getUserFromSessionOrJWT = async (
 	}
 	return user;
 };
+
+/*  
+	Higher other function for authenitcated requests. 
+ 	This is version of the getUserFromSessionOrJWT function
+*/
+type RouteParams = { [key: string]: string | undefined };
+
+export const withAuth =
+	<T = any>(
+		handler: (
+			request: NextRequest,
+			user: UserType,
+			params?: RouteParams
+		) => Promise<T>
+	) =>
+	async (
+		request: NextRequest,
+		context: { params?: RouteParams }
+	): Promise<T | NextResponse> => {
+		let user: UserType | null = null;
+
+		const session = await auth();
+
+		// Web client (NextAuth session)
+		if (session?.user) {
+			user = session.user as UserType;
+		} else {
+			// Mobile / API client
+			const _req = request as any as NextRequestWithUser;
+			const res = (await getUserFromHeader(_req)) as NextRequestWithUser;
+			user = res.user;
+		}
+
+		if (!user) {
+			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+		}
+
+		return handler(request, user, context.params);
+	};
