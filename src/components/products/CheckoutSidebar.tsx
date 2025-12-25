@@ -29,7 +29,7 @@ export default function CheckoutSidebar({ className }: { className?: string }) {
 	return (
 		<aside
 			className={cn(
-				"col-span-2 w-full p-4 flex flex-col gap-5 items-start justify-start bg-white border-slate-200 rounded-lg border-[1px] my-10 md:m-0 md:h-[80vh]",
+				"col-span-7 md:col-span-2 w-full p-4 flex flex-col gap-5 items-start justify-start bg-white border-slate-200 rounded-lg border-[1px] my-10 md:m-0 md:h-[80vh]",
 				className
 			)}
 		>

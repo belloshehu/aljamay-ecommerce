@@ -41,7 +41,7 @@ export default function NavigationDrawer({
 	return (
 		<Drawer direction="left" open={toggleDrawer} onOpenChange={setToggleDrawer}>
 			<DrawerTrigger>
-				<MenuIcon size={34} className="text-white" />
+				<MenuIcon size={34} className="text-[#ADF802]" />
 				<span className="sr-only">nav drawer</span>
 			</DrawerTrigger>
 			<DrawerContent>
@@ -66,12 +66,12 @@ export default function NavigationDrawer({
 								/>
 								<div className="flex flex-col">
 									<span className=" text-gray-900">
-										<small>
+										<small className="text-white">
 											{session?.user?.firstName} {session?.user?.lastName}(
 											{session?.user?.role})
 										</small>
 									</span>
-									<span className="text-xs text-gray-500">
+									<span className="text-xs text-[#ADF802]">
 										{session?.user?.email}
 									</span>
 								</div>

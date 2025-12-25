@@ -10,6 +10,9 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY!);
 const expiresIn = process.env.VERIFICATION_CODE_EXPIRATION!;
 
+/* 
+	Route for sending email verification code for an authenticated user 
+*/
 export async function GET(req: NextRequest) {
 	try {
 		// run authmiddeware
@@ -27,6 +30,9 @@ export async function GET(req: NextRequest) {
 				verificationCode: code.toString(),
 			},
 		});
+
+		const magicLink =
+			"https://aljamay.com/auth/email-verification-redirect?code=" + code;
 		// Send email
 		const { data, error } = await resend.emails.send({
 			from: "Acme <onboarding@resend.dev>",
@@ -34,8 +40,9 @@ export async function GET(req: NextRequest) {
 			subject: "Email verification",
 			react: EmailTemplate({
 				firstName: user.firstName,
-				bodyText: "Enter the below code to verify your email: ",
 				expiresIn,
+				link: magicLink,
+				code: code.toString(),
 			}),
 		});
 		if (error) {

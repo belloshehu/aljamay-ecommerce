@@ -22,7 +22,7 @@ export default async function ProductDetailPage(props: { params: Params }) {
 	}
 
 	return (
-		<section className="w-full p-5 md:p-20 ">
+		<section className="w-full p-2 md:p-20 ">
 			<div className="w-full gap-8 flex flex-col md:flex-row">
 				<section className="w-full md:w-2/3 flex flex-col">
 					<Image

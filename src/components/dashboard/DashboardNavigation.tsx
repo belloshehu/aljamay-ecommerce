@@ -31,7 +31,7 @@ export default function DashboardNavigation({ session }: { session: Session }) {
 	const user = session.user as UserType;
 	return (
 		<nav className="min-h-screen  p-4 col-span-1 hidden md:flex flex-col gap-2 border-r-[1px] ">
-			<h2>Hello, {user.firstName}</h2>
+			<h2 className="font-semibold">Hello, {user.firstName}</h2>
 			{user?.role === "ADMIN"
 				? renderNavItems(adminDashboardNavigation, pathname)
 				: renderNavItems(userDashboardNavigation, pathname)}

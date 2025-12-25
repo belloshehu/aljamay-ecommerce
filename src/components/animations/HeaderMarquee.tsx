@@ -11,7 +11,7 @@ export default function HeaderMarquee() {
 				autoplay
 				className="order-1 md:order-2 h-16 w-22"
 			/>
-			<h3 className="animate-pulse text-[#52700d] font-bold">
+			<h3 className="animate-pulse text-[#ADF802] font-bold">
 				Happy new year to you our esteemed customers
 			</h3>
 			<DotLottieReact

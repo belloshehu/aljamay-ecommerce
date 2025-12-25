@@ -10,7 +10,12 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import CartNavItem from "../cart/CartNavItem";
 import CategoryNavbar from "./CategoryNavbar";
 
-export default function ProductCategoryHeader() {
+interface ProductCategoryHeaderProps {
+	mode?: "mobile" | "desktop";
+}
+export default function ProductCategoryHeader({
+	mode = "desktop",
+}: ProductCategoryHeaderProps) {
 	const form = useForm({
 		resolver: zodResolver(producCategoryAndFilterSchema),
 		defaultValues: {
@@ -23,6 +28,10 @@ export default function ProductCategoryHeader() {
 	const isMobile = useIsMobile();
 	const onSubmit = (data: any) => {};
 
+	// for  desktop mode, when view is mobile, don't render
+	if (mode === "desktop" && isMobile) return null;
+	// for mobile mode, when view is desktop, don't render
+	if (mode == "mobile" && !isMobile) return null;
 	return (
 		<header className="w-full flex justify-center items-center h-fit ">
 			<Form {...form}>

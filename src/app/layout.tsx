@@ -9,6 +9,7 @@ import { Session } from "next-auth";
 import CustomQueryClientProvider from "@/providers/CustomQueryClientProvider";
 import { alfa_Slab_One } from "@/app/fonts";
 import { lazy, Suspense } from "react";
+import { MonitoredRenderProvider } from "@/providers/MonitoredRenderContext";
 
 const HeaderMarquee = lazy(
 	() => import("@/components/animations/HeaderMarquee")
@@ -59,12 +60,14 @@ export default async function RootLayout({
 			>
 				<CustomQueryClientProvider>
 					<AuthContextProvider>
-						<Suspense fallback={<p>Loading ... </p>}>
-							<HeaderMarquee />
-						</Suspense>
-						<Header session={session as Session} />
-						<main>{children}</main>
-						<Toaster />
+						<MonitoredRenderProvider>
+							<Suspense fallback={<p>Loading ... </p>}>
+								<HeaderMarquee />
+							</Suspense>
+							<Header session={session as Session} />
+							<main>{children}</main>
+							<Toaster />
+						</MonitoredRenderProvider>
 					</AuthContextProvider>
 				</CustomQueryClientProvider>
 				<Footer />

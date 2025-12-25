@@ -7,7 +7,7 @@ interface EmailTemplateProps {
 	expiresIn: string;
 }
 
-export function PassResetEmailTemplate({
+export function PasswordResetEmailTemplate({
 	firstName,
 	link,
 	expiresIn,

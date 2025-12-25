@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "../../../../lib/prisma";
+import { redirect } from "next/navigation";
 
 export async function POST(request: NextRequest) {
 	if (!process.env.DATABASE_URL) {

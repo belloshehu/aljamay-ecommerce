@@ -15,13 +15,13 @@ export default function Header({ session }: { session: Session }) {
 	const pathname = usePathname();
 	const isMobile = useIsMobile();
 
-	if (pathname === "/auth/login" || pathname === "/auth/signup") {
+	if (pathname.startsWith("/auth")) {
 		// Don't render the header on auth pages
 		return null;
 	}
 
 	return (
-		<header className=" border-b-2 border-t-[0px] flex flex-row items-center w-full justify-between text-white  px-3 py-2  lg:px-16">
+		<header className=" border-b-2 border-t-[0px] flex flex-row items-center w-full justify-between text-white  px-3 py-2  lg:px-16 mb-5">
 			<div className="brand">
 				<Link href={"/"}>
 					{/* <h1
@@ -38,14 +38,14 @@ export default function Header({ session }: { session: Session }) {
 					/>
 				</Link>
 			</div>
-			{!isMobile && <ProductCategoryHeader />}
+			<ProductCategoryHeader />
 			<Navbar />
-			<div className="block lg:hidden">
+			{isMobile && (
 				<CartNavItem
 					iconClassName="text-white"
 					className="bg-white text-[#ADF802]"
 				/>
-			</div>
+			)}
 			{!isMobile &&
 				(session?.user ? (
 					<ProfileDropdownMenu session={session} />
