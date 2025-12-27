@@ -1,7 +1,7 @@
 // JWT util functions used to encoding and decoding token from react native client
 
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "./prisma";
 import { NextRequestWithUser } from "@/types/user.types";
 import { StatusCodes } from "http-status-codes";

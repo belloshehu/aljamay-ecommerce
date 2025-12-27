@@ -1,8 +1,5 @@
 "use client";
 import { ProductQuantityField } from "./ProductQuantityField";
-// import { useDispatch, useSelector } from "react-redux";
-// import { setSelectedProduct } from "../../GlobalRedux/features/product/productSlice";
-// import { addToCart } from "../../GlobalRedux/features/cart/cartSlice";
 import { getDiscountPercent } from "@/lib/product.utils";
 import { ProductType } from "@/types/product.types";
 import { Button } from "../ui/button";
@@ -25,9 +22,7 @@ function ProductDetailSection({
 			quantity: 1,
 		});
 	};
-	useEffect(() => {
-		console.log(quantity);
-	}, [product]);
+	useEffect(() => {}, [product]);
 	if (!product) return <div>No product data</div>;
 	return (
 		<section className="flex flex-col gap-4">

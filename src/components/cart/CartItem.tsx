@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
 import { getDiscountPercent } from "@/lib/product.utils";
-
-import React from "react";
 import { CartItemType as CartItemProps } from "@/types/cart.types";
 import Image from "next/image";
 import { Button } from "../ui/button";

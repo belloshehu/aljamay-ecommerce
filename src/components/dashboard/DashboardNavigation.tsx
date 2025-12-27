@@ -28,10 +28,11 @@ const renderNavItems = (navItems: NavigationItemType[], pathname: string) => {
 
 export default function DashboardNavigation({ session }: { session: Session }) {
 	const pathname = usePathname();
-	const { role } = session.user as UserType;
+	const user = session.user as UserType;
 	return (
 		<nav className="min-h-screen  p-4 col-span-1 hidden md:flex flex-col gap-2 border-r-[1px] ">
-			{role === "ADMIN"
+			<h2 className="font-semibold">Hello, {user.firstName}</h2>
+			{user?.role === "ADMIN"
 				? renderNavItems(adminDashboardNavigation, pathname)
 				: renderNavItems(userDashboardNavigation, pathname)}
 		</nav>

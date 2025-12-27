@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 
 /*
-   Verifies code send from client before password reset 
+   Verifies code sent from client before password reset 
 
 */
 export async function POST(req: NextRequest) {

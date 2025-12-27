@@ -1,4 +1,4 @@
-import { EmailTemplate } from "@/components/email/email-template";
+import { EmailVerificationTemplate } from "@/components/email/email-template";
 import { authMiddleware } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import { NextRequestWithUser } from "@/types/user.types";
@@ -10,6 +10,9 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY!);
 const expiresIn = process.env.VERIFICATION_CODE_EXPIRATION!;
 
+/* 
+	Route for sending email verification code for an authenticated user 
+*/
 export async function GET(req: NextRequest) {
 	try {
 		// run authmiddeware
@@ -27,15 +30,18 @@ export async function GET(req: NextRequest) {
 				verificationCode: code.toString(),
 			},
 		});
+
+		const magicLink =
+			"https://aljamay.com/auth/email-verification-redirect?code=" + code;
 		// Send email
 		const { data, error } = await resend.emails.send({
 			from: "Acme <onboarding@resend.dev>",
 			to: [user.email],
 			subject: "Email verification",
-			react: EmailTemplate({
+			react: EmailVerificationTemplate({
 				firstName: user.firstName,
-				bodyText: "Enter the below code to verify your email: ",
 				expiresIn,
+				link: magicLink,
 			}),
 		});
 		if (error) {

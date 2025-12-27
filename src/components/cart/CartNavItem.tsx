@@ -16,15 +16,14 @@ const CartNavItem = ({
 			className="relative flex items-center justify-center gap-2"
 			href={"/products/cart"}
 		>
-			<span
-				className={cn(
-					"flex items-center justify-center absolute -top-2 bg-opacity-75 -right-3 bg-[#ADF802] text-white rounded-full w-6 h-6 text-center",
-					className
-				)}
-			>
-				<small>{data?.length || 0}</small>
-			</span>
-			<ShoppingCart className={cn("text-3xl text-[#ADF802]", iconClassName)} />
+			<ShoppingCart
+				className={cn("text-3xl text-[#ADF802]", iconClassName)}
+				color="#ADF802"
+				size={30}
+			/>
+			<small className="text-black bg-[#ADF802]  px-2 rounded-full absolute -right-3 bottom-2">
+				{data?.length || 0}
+			</small>
 		</Link>
 	);
 };

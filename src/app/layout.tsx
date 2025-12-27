@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
@@ -8,11 +8,12 @@ import { auth } from "../../auth";
 import { Session } from "next-auth";
 import CustomQueryClientProvider from "@/providers/CustomQueryClientProvider";
 import { alfa_Slab_One } from "@/app/fonts";
+import { lazy, Suspense } from "react";
+import { MonitoredRenderProvider } from "@/providers/MonitoredRenderContext";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
+const HeaderMarquee = lazy(
+	() => import("@/components/animations/HeaderMarquee")
+);
 
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
@@ -59,12 +60,16 @@ export default async function RootLayout({
 			>
 				<CustomQueryClientProvider>
 					<AuthContextProvider>
-						<Header session={session as Session} />
-						<main>{children}</main>
-						<Toaster />
+						<MonitoredRenderProvider>
+							<Suspense fallback={<p>Loading ... </p>}>
+								<HeaderMarquee />
+							</Suspense>
+							<Header session={session as Session} />
+							<main>{children}</main>
+							<Toaster />
+						</MonitoredRenderProvider>
 					</AuthContextProvider>
 				</CustomQueryClientProvider>
-
 				<Footer />
 			</body>
 		</html>

@@ -46,7 +46,7 @@ export default function Product({ product }: ProductProps) {
 				width={200}
 				height={200}
 				alt={name}
-				className="rounded-t-md w-full object-cover cursor-pointer"
+				className="rounded-t-md w-full object-cover cursor-pointer max-w-[200px]"
 				onClick={handleProductClick}
 			/>
 			{/* displays status of product whether it is available or not */}

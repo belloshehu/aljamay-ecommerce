@@ -1,7 +1,6 @@
 import Product from "@/components/products/Product";
 import { getProducts } from "@/app/actions/product.action";
 import { ProductType } from "@/types/product.types";
-import ProductCategoryHeader from "@/components/products/ProductFilterHearder";
 
 export default async function ProductsPage() {
 	const products = (await getProducts(20, 0, "")) as ProductType[] | null;
@@ -9,7 +8,7 @@ export default async function ProductsPage() {
 	if (!products) {
 		return (
 			<section className="w-full p-2 flex flex-col justify-start">
-				<ProductCategoryHeader />
+				{/* <ProductCategoryHeader /> */}
 				<div className="flex flex-col  gap-10 justify-center items-center min-h-[50vh]">
 					<h1 className="text-xl font-semibold text-red-500">
 						No products yet
@@ -29,7 +28,7 @@ export default async function ProductsPage() {
 	}
 	return (
 		<div className="w-full">
-			<ProductCategoryHeader />
+			{/* <ProductCategoryHeader /> */}
 			<h1 className="text-2xl font-bold mb-4">Products ({products.length})</h1>
 			{/* Add more dashboard content here */}
 			<section className="w-full">

@@ -41,8 +41,6 @@ export default function ProductForm({
 		const image = data.image[0] as any;
 		const data_url = image.data_url as string;
 
-		console.log("Uploading main image");
-
 		try {
 			const { secure_url } = await uploadToCloudinary(
 				data_url,
@@ -143,7 +141,7 @@ export default function ProductForm({
 					control={control}
 					name="image"
 					label="Product Image"
-					maxImageSize={1000000}
+					maxImageSize={5000000}
 					className="w-full h-[100px] justify-start items-start"
 					previewHeight={300}
 					previewWidth={250}

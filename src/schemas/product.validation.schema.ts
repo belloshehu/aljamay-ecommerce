@@ -32,4 +32,21 @@ const productCreateValidationSchema = z.object({
 export type ProductCreateValidationSchemaType = z.infer<
 	typeof productCreateValidationSchema
 >;
-export { producCategoryAndFilterSchema, productCreateValidationSchema };
+
+// Validation schema for Product category
+
+const productCategoryCreateValidationSchema = z.object({
+	name: z.enum(productCatoriesEnum as [string, ...string[]]).default("all"),
+	image: z.any({ message: "Image is required" }),
+	description: z.string().min(1, { message: "Description is required" }),
+});
+
+export type ProductCategoryValidationSchemaType = z.infer<
+	typeof productCategoryCreateValidationSchema
+>;
+
+export {
+	producCategoryAndFilterSchema,
+	productCreateValidationSchema,
+	productCategoryCreateValidationSchema,
+};

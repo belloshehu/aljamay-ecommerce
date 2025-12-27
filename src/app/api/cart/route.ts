@@ -1,24 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
+import { StatusCodes } from "http-status-codes";
+import { getUserFromSessionOrJWT } from "@/lib/auth";
+import { UserType } from "@/types/user.types";
 
 export async function GET(req: NextRequest) {
 	try {
-		const session = await auth();
-		if (!session?.user) {
-			return NextResponse.json(
-				{
-					message: "You must be logged in to access this resource",
-				},
-				{
-					status: 401,
-				}
-			);
-		}
-
+		const user = (await getUserFromSessionOrJWT(req)) as UserType;
 		const cartItems = await prisma.cartItem.findMany({
 			where: {
-				userId: session.user.id, // Assuming you have a userId field in your cart item model
+				userId: user.id, // Assuming you have a userId field in your cart item model
 			},
 			include: {
 				product: true, // Include product details
@@ -26,7 +17,7 @@ export async function GET(req: NextRequest) {
 		});
 		return NextResponse.json(
 			{
-				message: "Cart items retrieved successfully",
+				message: "Cart items retrieved",
 				data: cartItems,
 			},
 			{
@@ -55,20 +46,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const session = await auth();
-
-		if (!session?.user) {
-			return NextResponse.json(
-				{
-					message: "You must be logged in to access this resource",
-				},
-				{
-					status: 401,
-				}
-			);
-		}
-
-		console.log("Adding item to cart");
+		const user = (await getUserFromSessionOrJWT(req)) as UserType;
 		const { productId, quantity } = await req.json();
 		if (!productId || !quantity) {
 			return NextResponse.json(
@@ -95,7 +73,7 @@ export async function POST(req: NextRequest) {
 		const existingCartItem = await prisma.cartItem.findFirst({
 			where: {
 				productId,
-				userId: session.user.id, // Assuming you have a userId field in your cart item model
+				userId: user.id, // Assuming you have a userId field in your cart item model
 			},
 		});
 		if (existingCartItem) {
@@ -109,7 +87,7 @@ export async function POST(req: NextRequest) {
 			});
 			return NextResponse.json(
 				{
-					message: "Item quantity updated in cart successfully",
+					message: "Item quantity updated in cart",
 					data: updatedCartItem,
 				},
 				{
@@ -122,12 +100,12 @@ export async function POST(req: NextRequest) {
 			data: {
 				productId,
 				quantity,
-				userId: session.user.id, // Assuming you have a userId field in your cart item model
+				userId: user.id, // Assuming you have a userId field in your cart item model
 			},
 		});
 		return NextResponse.json(
 			{
-				message: "Item added to cart successfully",
+				message: "Item added to cart.",
 				data: cartItem,
 			},
 			{

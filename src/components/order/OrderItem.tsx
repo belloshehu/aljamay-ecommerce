@@ -10,7 +10,6 @@ interface OrderItemProps extends OrderItemType {
 	className?: string;
 	status?: OrderStatus;
 	shippingAddress?: ShippingAddressType;
-	orderNumber?: string;
 }
 export default function OrderItem({
 	className,
@@ -22,18 +21,23 @@ export default function OrderItem({
 	orderNumber,
 }: OrderItemProps) {
 	return (
-		<Card className={cn("w-full p-5 flex flex-col gap-3", className)}>
+		<Card
+			className={cn(
+				"w-full p-5 flex flex-col gap-3 shadow-none bg-white",
+				className
+			)}
+		>
 			<header className="flex items-center justify-between w-full">
-				<h3 className="font-medium">{formatDate(createdAt.toString())}</h3>
+				<h3 className="font-medium">{formatDate(createdAt?.toString()!)}</h3>
 				<h3 className="font-medium text-cyan-500">{status}</h3>
 			</header>
 			<Separator className="w-full" />
 			<div>
+				<h4 className="text-lg font-medium">{product.name}</h4>
 				<p className="text-sm text-slate-500">Order Number: {orderNumber}</p>
 				<p className="text-sm text-slate-500">Quantity: {quantity}</p>
 				<p className="text-sm text-slate-500">Total: {price * quantity}</p>
 			</div>
-			<h3 className="text-xl font-medium">{product.name}</h3>
 			<p className="text-sm text-slate-500">{product.description}</p>
 			<Image
 				src={product.image}

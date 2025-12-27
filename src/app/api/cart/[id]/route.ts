@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../../../../auth";
 import { prisma } from "@/lib/prisma";
+import { getUserFromSessionOrJWT } from "@/lib/auth";
+import { StatusCodes } from "http-status-codes";
 
 export async function DELETE(
 	req: NextRequest,
 	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
-		const session = await auth();
-
-		if (!session?.user) {
+		const user = await getUserFromSessionOrJWT(req);
+		if (!user) {
 			return NextResponse.json(
 				{
-					message: "You must be logged in to access this resource",
+					message: "Unauthorized. Please login",
 				},
 				{
-					status: 401,
+					status: StatusCodes.UNAUTHORIZED,
 				}
 			);
 		}
@@ -27,7 +28,7 @@ export async function DELETE(
 					message: "Cart item ID is required",
 				},
 				{
-					status: 400,
+					status: StatusCodes.BAD_REQUEST,
 				}
 			);
 		}
@@ -35,27 +36,29 @@ export async function DELETE(
 		const deletedCartItem = await prisma.cartItem.delete({
 			where: {
 				id,
-				userId: session.user.id, // Ensure the item belongs to the user
+				userId: user.id, // Ensure the item belongs to the user
 			},
 		});
 
 		return NextResponse.json(
 			{
-				message: "Item removed from cart successfully",
+				message: "Item removed from cart.",
+				error: "Item removed from cart.",
 				data: deletedCartItem,
 			},
 			{
-				status: 200,
+				status: StatusCodes.CREATED,
 			}
 		);
 	} catch (error) {
+		console.log(error);
 		return NextResponse.json(
 			{
 				message: "Failed to remove item from cart",
 				error: error instanceof Error ? error.message : "Unknown error",
 			},
 			{
-				status: 500,
+				status: StatusCodes.INTERNAL_SERVER_ERROR,
 			}
 		);
 	}
@@ -66,14 +69,14 @@ export async function PATCH(
 	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
-		const session = await auth();
-		if (!session?.user) {
+		const user = await getUserFromSessionOrJWT(req);
+		if (!user) {
 			return NextResponse.json(
 				{
-					message: "You must be logged in to access this resource",
+					message: "Unauthorized. Please login",
 				},
 				{
-					status: 401,
+					status: StatusCodes.UNAUTHORIZED,
 				}
 			);
 		}
@@ -87,7 +90,7 @@ export async function PATCH(
 					message: "Cart item ID and quantity are required",
 				},
 				{
-					status: 400,
+					status: StatusCodes.BAD_REQUEST,
 				}
 			);
 		}
@@ -97,14 +100,14 @@ export async function PATCH(
 					message: "Quantity must be at least 1",
 				},
 				{
-					status: 400,
+					status: StatusCodes.BAD_REQUEST,
 				}
 			);
 		}
 		const updatedCartItem = await prisma.cartItem.update({
 			where: {
 				id,
-				userId: session.user.id, // Ensure the item belongs to the user
+				userId: user.id, // Ensure the item belongs to the user
 			},
 			data: {
 				quantity: quantity,
@@ -116,7 +119,7 @@ export async function PATCH(
 				data: updatedCartItem,
 			},
 			{
-				status: 200,
+				status: StatusCodes.OK,
 			}
 		);
 	} catch (error) {
@@ -126,7 +129,7 @@ export async function PATCH(
 				error: error instanceof Error ? error.message : "Unknown error",
 			},
 			{
-				status: 500,
+				status: StatusCodes.INTERNAL_SERVER_ERROR,
 			}
 		);
 	}

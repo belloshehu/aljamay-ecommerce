@@ -8,7 +8,7 @@ type Params = Promise<{ id: string }>;
 export default async function ProductDetailPage(props: { params: Params }) {
 	const params = await props.params;
 	const product = (await getProductById(params.id)) as ProductType | null;
-
+	const reviews = [];
 	if (!product) {
 		return (
 			<section className="w-full p-5 md:p-20">
@@ -22,7 +22,7 @@ export default async function ProductDetailPage(props: { params: Params }) {
 	}
 
 	return (
-		<section className="w-full p-5 md:p-20 ">
+		<section className="w-full p-2 md:p-20 ">
 			<div className="w-full gap-8 flex flex-col md:flex-row">
 				<section className="w-full md:w-2/3 flex flex-col">
 					<Image
@@ -53,8 +53,10 @@ export default async function ProductDetailPage(props: { params: Params }) {
 				{/* details section */}
 				<ProductDetailSection product={product as ProductType} />
 			</div>
+
 			<div className="w-full mt-10">
-				<h1 className="font-bold text-3xl">Reviews</h1>
+				<h1 className="font-bold text-3xl mb-5">Reviews</h1>
+				{reviews.length === 0 && <h4>No reviews yet for this product</h4>}
 			</div>
 		</section>
 	);

@@ -64,7 +64,9 @@ export default function CheckoutPage() {
 						addressData={selectedAddress}
 					/>
 				</div>
-				<ScrollArea className="w-full md:max-h-[300px]">
+
+				{/* List of user's shipping addresses */}
+				<ScrollArea className="w-full h-fit gap-10 flex flex-col">
 					{loadingAddresses ? (
 						<Loader />
 					) : (

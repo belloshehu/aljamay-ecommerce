@@ -1,4 +1,4 @@
-import { PassResetEmailTemplate } from "@/components/email/password-reset-template";
+import { PasswordResetEmailTemplate } from "@/components/email/password-reset-template";
 import { signJWT } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		// update user with the code
+		// update user with the verication date
 		await prisma.user.update({
 			where: { email: user.email },
 			data: {
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 			from: "Acme <onboarding@resend.dev>",
 			to: [user.email],
 			subject: "Password Reset",
-			react: PassResetEmailTemplate({
+			react: PasswordResetEmailTemplate({
 				firstName: user.firstName,
 				link: magicLink,
 				expiresIn,
