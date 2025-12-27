@@ -1,5 +1,7 @@
+import { Order } from "@prisma/client";
 import { ProductType } from "./product.types";
 import { ResponseType } from "./response.types";
+import { UserType } from "./user.types";
 
 export type PaymentStatus = "PENDING" | "COMPLETED" | "FAILED";
 export type PaymentMethod = "CREDIT_CARD" | "USSD" | "BANK_TRANSFER";
@@ -10,18 +12,9 @@ export type OrderStatus =
 	| "SHIPPED"
 	| "DELIVERED";
 
-export interface OrderType {
-	id: string;
-	userId: string;
+export interface OrderType extends Order {
 	orderItems: OrderItemType[];
-	shippingAddressId: string;
-	paymentMethod: string | null;
-	totalAmount: number;
-	status: OrderStatus;
-	paymentStatus: PaymentStatus;
-	shippingCost?: number;
-	createdAt?: Date;
-	updatedAt?: Date;
+	user: UserType;
 }
 
 export interface OrderItemType {

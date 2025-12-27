@@ -1,5 +1,7 @@
 import { formatDate } from "@/lib/timedate";
 import { cn } from "@/lib/utils";
+import { UserType } from "@/types/user.types";
+import Avatar from "../users/Avatar";
 
 export default function OrderListHeader({
 	createdAt,
@@ -7,17 +9,19 @@ export default function OrderListHeader({
 	OrderItemsCount,
 	className,
 	totalAmount,
+	user,
 }: {
 	createdAt: string;
 	status: string;
 	className?: string;
 	OrderItemsCount?: number;
 	totalAmount?: number;
+	user: UserType;
 }) {
 	return (
 		<header
 			className={cn(
-				"w-full md:w-1/2 flex items-center justify-between p-2 bg-gray-100 rounded-md shadow-sm",
+				"w-full flex items-center justify-between p-2 bg-gray-50 rounded-md shadow-sm",
 				className
 			)}
 		>
@@ -27,6 +31,7 @@ export default function OrderListHeader({
 				{totalAmount}
 			</h2>
 			<h3 className="text-lg font-semibold text-[#ADF802]">{status}</h3>
+			<Avatar imageUrl={user?.image!} />
 		</header>
 	);
 }

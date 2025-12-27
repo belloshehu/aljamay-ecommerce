@@ -8,7 +8,7 @@ export default function DashboardMetric({
 	metric: number;
 }) {
 	return (
-		<Card className="hover:transition-all hover:scale-105 duration-200 text-gray-500 bg-[#ADF802] flex flex-col justify-between">
+		<Card className="hover:transition-all hover:scale-105 duration-200 text-gray-500 bg-white flex flex-col justify-between">
 			<CardHeader>
 				<h2 className=" font-semibold md:text-xl md:font-bold text-gray-700">
 					{title}

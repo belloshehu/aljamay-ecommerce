@@ -1,8 +1,9 @@
 import { ProductType } from "@/types/product.types";
 import Product from "./Product";
-import Loader from "../Loader";
+
 import { ProductListSkeleton } from "./skeletons/ProductSkeleton";
 import { ScrollArea } from "../ui/scroll-area";
+import { useGetProducts } from "@/hooks/service-hooks/product.service.hooks";
 
 export default function ProductList({
 	products,

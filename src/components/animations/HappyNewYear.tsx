@@ -26,14 +26,12 @@ export default function HappyNewYear() {
 		const date = new Date();
 		return date.getMonth() === 11;
 	};
-
-	console.log(happyNewYearCount);
 	if (happyNewYearCount > 0) return null;
 	return (
 		<Dialog modal open={!isValidMonth() || visible}>
 			<DialogOverlay className="bg-black/80 justify-center items-center p-5 md:p-20">
 				<h1 className="animate-pulse text-5xl font-bold text-[#ADF802] text-center">
-					{isDecember() ? "Happy new year in Advance " : "Happy new Year"}
+					{isDecember() ? "Happy new year in advance " : "Happy new Year"}
 				</h1>
 				<DotLottieReact src="animations/fireworks.lottie" loop autoplay />
 			</DialogOverlay>

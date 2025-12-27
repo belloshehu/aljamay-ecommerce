@@ -53,11 +53,11 @@ export default async function ProductDetailPage(props: { params: Params }) {
 				{/* details section */}
 				<ProductDetailSection product={product as ProductType} />
 			</div>
-			{reviews.length > 0 && (
-				<div className="w-full mt-10">
-					<h1 className="font-bold text-3xl">Reviews</h1>
-				</div>
-			)}
+
+			<div className="w-full mt-10">
+				<h1 className="font-bold text-3xl mb-5">Reviews</h1>
+				{reviews.length === 0 && <h4>No reviews yet for this product</h4>}
+			</div>
 		</section>
 	);
 }

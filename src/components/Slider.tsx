@@ -1,3 +1,4 @@
+"use client";
 import AwesomeSlider from "react-awesome-slider";
 // @ts-expect-error it is a type error
 import withAutoplay from "react-awesome-slider/dist/autoplay";
