@@ -2,8 +2,11 @@ import { NextRequestWithUser, UserType } from "@/types/user.types";
 import { StatusCodes } from "http-status-codes";
 import { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authMiddleware as getUserFromHeader } from "./jwt";
+import { authMiddleware as getUserFromHeader, signJWT } from "./jwt";
 import { auth } from "../../auth";
+import { Resend } from "resend";
+import { EmailVerificationTemplate } from "@/components/email/email-template";
+import { prisma } from "./prisma";
 
 export const hasExpired = (date: Date) => {
 	/* Returns true if time has expired. Otherwise false
@@ -84,3 +87,32 @@ export const withAuth =
 
 		return handler(request, user, context.params);
 	};
+
+const resend = new Resend(process.env.RESEND_API_KEY!);
+const expiresIn = process.env.VERIFICATION_CODE_EXPIRATION!;
+export const sendVerificationEmail = async (user: UserType) => {
+	// update user with the verification date to determine whehter a link is exoired or not
+	await prisma.user.update({
+		where: { email: user.email },
+		data: {
+			verificationDate: new Date(),
+		},
+	});
+
+	// construct a magic link
+	const token = await signJWT({ email: user.email, id: user.id });
+	const magicLink =
+		"https://aljamay.com/auth/email-verification-redirect?token=" + token;
+
+	// Send email with the magic link
+	const { error } = await resend.emails.send({
+		from: "Aljamay <onboarding@resend.dev>",
+		to: [user.email],
+		subject: "Email verification",
+		react: EmailVerificationTemplate({
+			firstName: user.firstName,
+			link: magicLink,
+			expiresIn,
+		}),
+	});
+};

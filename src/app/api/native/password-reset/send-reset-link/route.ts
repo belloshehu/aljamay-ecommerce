@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		// update user with the code
+		// update user with the verication date
 		await prisma.user.update({
 			where: { email: user.email },
 			data: {

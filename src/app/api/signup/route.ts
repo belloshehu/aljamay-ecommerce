@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "@/lib/prisma";
+import { sendVerificationEmail } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
 	if (!process.env.DATABASE_URL) {
@@ -91,10 +92,13 @@ export async function POST(request: NextRequest) {
 			},
 		});
 
+		// Send verification email
+		await sendVerificationEmail(user);
+
 		return NextResponse.json(
 			{
 				user,
-				message: "User registered!",
+				message: "Signup success! Check your email for verification link.",
 			},
 			{ status: 201 }
 		);

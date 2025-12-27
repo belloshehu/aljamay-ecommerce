@@ -30,11 +30,33 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
 	try {
+		let searchKey = request.nextUrl.searchParams.get("search");
+		if (searchKey?.toLowerCase() == "all") {
+			searchKey = "";
+		}
+
 		const products = await prisma.product.findMany({
+			where: {
+				OR: [
+					{
+						name: {
+							contains: searchKey ? searchKey : "",
+							mode: "insensitive",
+						},
+					},
+					{
+						description: {
+							contains: searchKey ? searchKey : "",
+							mode: "insensitive",
+						},
+					},
+				],
+			},
 			orderBy: {
 				createdAt: "desc",
 			},
 		});
+
 		return NextResponse.json(
 			{ data: products, message: "Products fetched" },
 			{ status: 200 }

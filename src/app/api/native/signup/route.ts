@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "../../../../lib/prisma";
-import { redirect } from "next/navigation";
+import { Resend } from "resend";
+import { signJWT } from "@/lib/jwt";
+import { EmailVerificationTemplate } from "@/components/email/email-template";
+import { sendVerificationEmail } from "@/lib/auth";
 
+const resend = new Resend(process.env.RESEND_API_KEY!);
+const expiresIn = process.env.VERIFICATION_CODE_EXPIRATION!;
 export async function POST(request: NextRequest) {
 	if (!process.env.DATABASE_URL) {
 		return NextResponse.json(
@@ -93,10 +98,13 @@ export async function POST(request: NextRequest) {
 			},
 		});
 
+		// Send email verification link
+		await sendVerificationEmail(user);
+
 		return NextResponse.json(
 			{
 				user,
-				message: "User registered!",
+				message: "Signup success! Check your email for verification link.",
 			},
 			{ status: 201 }
 		);

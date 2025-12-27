@@ -1,4 +1,4 @@
-import { EmailTemplate } from "@/components/email/email-template";
+import { EmailVerificationTemplate } from "@/components/email/email-template";
 import { authMiddleware } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import { NextRequestWithUser } from "@/types/user.types";
@@ -38,11 +38,10 @@ export async function GET(req: NextRequest) {
 			from: "Acme <onboarding@resend.dev>",
 			to: [user.email],
 			subject: "Email verification",
-			react: EmailTemplate({
+			react: EmailVerificationTemplate({
 				firstName: user.firstName,
 				expiresIn,
 				link: magicLink,
-				code: code.toString(),
 			}),
 		});
 		if (error) {

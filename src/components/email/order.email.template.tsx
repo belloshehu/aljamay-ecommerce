@@ -78,7 +78,7 @@ export function OrderEmailTemplate({
 						href={orderLink}
 						style={{
 							backgroundColor: "#ADF802",
-							color: "#fff",
+							color: "#000",
 							padding: "12px 20px",
 							textDecoration: "none",
 							borderRadius: "6px",

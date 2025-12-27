@@ -5,20 +5,18 @@ interface EmailTemplateProps {
 	firstName: string;
 	expiresIn: string;
 	link: string;
-	code: string;
 }
 
-export function EmailTemplate({
+export function EmailVerificationTemplate({
 	firstName,
 	expiresIn,
 	link,
-	code,
 }: EmailTemplateProps) {
 	return (
 		<div>
 			<Head>
 				<Heading>Email Verification</Heading>
-				<h1>Hi {firstName}!</h1>
+				<h4>Hi {firstName}!</h4>
 			</Head>
 			<Body>
 				<p>Click the button below to proceed with email verification:</p>
@@ -27,7 +25,7 @@ export function EmailTemplate({
 						href={link}
 						style={{
 							backgroundColor: "#ADF802",
-							color: "#fff",
+							color: "#000",
 							padding: "12px 20px",
 							textDecoration: "none",
 							borderRadius: "6px",
